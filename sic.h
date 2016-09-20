@@ -83,5 +83,6 @@ protected:
 	};
 
 private:
+	int fetch(short addr) const;
 };
 

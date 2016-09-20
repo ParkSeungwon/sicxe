@@ -37,3 +37,38 @@ Register::operator int()
 	tmp |= address;
 	return tmp;
 }
+
+int SIC::fetch(short addr) const
+{
+	int r = memory[addr];
+	r <<= 16;
+	int k = memory[addr + 1];
+	k <<= 8;
+	r |= k;
+	r |= memory[addr + 2];
+	return r;
+}
+
+void SIC::LDX(short operand) {}
+void SIC::STX(short operand) {}
+void SIC::ADD(short operand) 
+{
+	int k = fetch(operand);
+	int a = A;
+	A = a + k;
+}
+void SIC::SUB(short operand) {}
+void SIC::MUL(short operand) {}
+void SIC::DIV(short operand) {}
+void SIC::COMP(short operand) {}
+void SIC::JEQ(short operand) {}
+void SIC::JGT(short operand) {}
+void SIC::JLT(short operand) {}
+void SIC::JSUB(short operand) {}
+void SIC::RSUB(short operand) {}
+void SIC::RD(short operand) {}
+void SIC::WD(short operand) {}
+void SIC::TD(short operand) {}
+
+
+

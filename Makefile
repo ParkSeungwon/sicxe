@@ -1,5 +1,4 @@
 CFLAG = -g -std=c++11 -fmax-errors=1
-MYLIB = -lzezeon -lmysqlcppconn
 CC = g++
 SRC = $(wildcard *.cc)
 CPP = $(wildcard *.cpp)

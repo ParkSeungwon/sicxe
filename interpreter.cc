@@ -32,6 +32,7 @@ void Interpreter::show_mem()
 		cout << setfill('0') << setw(2) << hex << +memory[i];
 		if(i % 3 == 2) cout << ' ';
 	}
+	cout << endl;
 }
 
 void Interpreter::execute()
