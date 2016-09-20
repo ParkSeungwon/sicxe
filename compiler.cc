@@ -2,7 +2,7 @@
 #include<iomanip>
 #include<string>
 #include<fstream>
-#include"sic.h"
+#include"compiler.h"
 using namespace std;
 
 Compiler::Compiler(string file)
@@ -17,9 +17,9 @@ Compiler::Compiler(string file)
 void Compiler::create_object(string file)
 {
 	ofstream f(file);
-	f << "start " << hex << sym_table["start"] << endl;
-	f << "data " << hex << sym_table["data_begin"] << endl;
-	f << "end " << hex << sym_table["end"] << endl;
+	f << "start " << hex << setfill('0') << setw(4) << sym_table["start"] << endl;
+	f << "data " << hex << setfill('0') << setw(4) << sym_table["data_begin"] << endl;
+	f << "end " << hex << setfill('0') << setw(4) << sym_table["end"] << endl;
 	for(auto& a : obj_code) {
 		f << hex << setfill('0') << setw(4) << a.first << ' ' 
 			<< hex << setfill('0') << setw(2) << +a.second.opcode 
@@ -91,11 +91,6 @@ void Compiler::make_sym_table()
 		}
 	}
 	//for(auto& a : sym_table) cout << a.first << ' ' << hex << a.second << endl;
-}
-
-bool SIC::is_opcode(string s)
-{
-	return op_table.find(s) != op_table.end();
 }
 		
 void Compiler::fill_instructions(string file)

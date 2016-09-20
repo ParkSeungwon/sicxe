@@ -2,6 +2,6 @@
 	lda   five
 	sta xx
 five word 5
-xx resb 1
+xx resw 5
 	end first
 

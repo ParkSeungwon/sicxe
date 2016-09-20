@@ -2,7 +2,7 @@
 #include<vector>
 #include<fstream>
 #include<iostream>
-#include"sic.h"
+#include"compiler.h"
 using namespace std;
 
 int main(int argc, char** argv)

@@ -16,4 +16,24 @@ void SIC::STA(short addr)
 	memory[addr + 2] = A.address & 255;
 }
 
+bool SIC::is_opcode(string s)
+{
+	return op_table.find(s) != op_table.end();
+}
 
+Register& Register::operator=(int n)
+{
+	address = n & 65535;
+	n <<= 8;
+	n >>= 24;
+	opcode = n;
+	return *this;
+}
+
+Register::operator int()
+{
+	int tmp = opcode;
+	tmp <<= 16;
+	tmp |= address;
+	return tmp;
+}
