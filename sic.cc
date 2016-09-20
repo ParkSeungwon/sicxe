@@ -3,10 +3,7 @@ using namespace std;
 
 void SIC::LDA(short addr)
 {
-	A.opcode = memory[addr];
-	short t = memory[addr + 1];
-	t = t << 8;
-	A.address = t | memory[addr + 2];
+	A = fetch(addr);
 }
 
 void SIC::STA(short addr)
@@ -49,8 +46,16 @@ int SIC::fetch(short addr) const
 	return r;
 }
 
-void SIC::LDX(short operand) {}
-void SIC::STX(short operand) {}
+void SIC::LDX(short operand) 
+{
+	X = fetch(operand);
+}
+void SIC::STX(short addr) 
+{
+	memory[addr] = X.opcode;
+	memory[addr + 1] = X.address >> 8;
+	memory[addr + 2] = X.address & 255;
+}
 void SIC::ADD(short operand) 
 {
 	int k = fetch(operand);
