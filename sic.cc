@@ -37,3 +37,22 @@ Register::operator int()
 	tmp |= address;
 	return tmp;
 }
+
+void SIC::LDX(short operand) {}
+void SIC::STX(short operand) {}
+void SIC::ADD(short operand) {}
+void SIC::SUB(short operand) {}
+void SIC::MUL(short operand) {}
+void SIC::DIV(short operand) {}
+void SIC::COMP(short operand) {}
+void SIC::JEQ(short operand) {}
+void SIC::JGT(short operand) {}
+void SIC::JLT(short operand) {}
+void SIC::JSUB(short operand) {}
+void SIC::RSUB(short operand) {}
+void SIC::RD(short operand) {}
+void SIC::WD(short operand) {}
+void SIC::TD(short operand) {}
+
+
+
