@@ -1,3 +1,4 @@
+//SIC/XE 구현부
 #include"sic.h"
 using namespace std;
 
@@ -46,9 +47,9 @@ int SIC::fetch(short addr) const
 	return r;
 }
 
-void SIC::LDX(short operand) 
+void SIC::LDX(short addr) 
 {
-	X = fetch(operand);
+	X = fetch(addr);
 }
 void SIC::STX(short addr) 
 {
@@ -56,24 +57,50 @@ void SIC::STX(short addr)
 	memory[addr + 1] = X.address >> 8;
 	memory[addr + 2] = X.address & 255;
 }
-void SIC::ADD(short operand) 
+void SIC::ADD(short addr) 
 {
-	int k = fetch(operand);
+	int n = fetch(addr);
 	int a = A;
-	A = a + k;
+	A = a + n;
 }
-void SIC::SUB(short operand) {}
-void SIC::MUL(short operand) {}
-void SIC::DIV(short operand) {}
-void SIC::COMP(short operand) {}
-void SIC::JEQ(short operand) {}
-void SIC::JGT(short operand) {}
-void SIC::JLT(short operand) {}
-void SIC::JSUB(short operand) {}
-void SIC::RSUB(short operand) {}
-void SIC::RD(short operand) {}
-void SIC::WD(short operand) {}
-void SIC::TD(short operand) {}
+void SIC::SUB(short addr)
+{
+	int n = fetch(addr);
+	int a = A;
+	A = a - n;
+}
+
+void SIC::LDCH(short addr)
+{
+	A = memory[addr];
+}
+
+void SIC::STCH(short addr)
+{
+	memory[addr] = A.address & 255;
+}
+
+void SIC::MUL(short addr) 
+{
+	int n = fetch(addr);
+	int a = A;
+	A = a * n;
+}
+void SIC::DIV(short addr) 
+{
+	int n = fetch(addr);
+	int a = A;
+	A = a / n;
+}
+void SIC::COMP(short addr) {}
+void SIC::JEQ(short addr) {}
+void SIC::JGT(short addr) {}
+void SIC::JLT(short addr) {}
+void SIC::JSUB(short addr) {}
+void SIC::RSUB(short addr) {}
+void SIC::RD(short addr) {}
+void SIC::WD(short addr) {}
+void SIC::TD(short addr) {}
 
 
 

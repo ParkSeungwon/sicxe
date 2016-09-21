@@ -1,3 +1,4 @@
+//인터프리터 구현부.
 #include<fstream>
 #include<iostream>
 #include<iomanip>
@@ -16,21 +17,26 @@ void Interpreter::load_to_memory(string file)
 {
 	ifstream f(file);
 	string s;
+	char c[5];
 	int addr, mnemonic;
 	f >> s >> hex >> start >> s >> hex >> data_begin >> s >> hex >> end;
-	while(f >> hex >> addr >> hex >> mnemonic) {
-		memory[addr] = mnemonic >> 16;
-		memory[addr + 1] = (mnemonic >> 8) & 255;
-		memory[addr + 2] = mnemonic & 255;
+	addr = start;
+	while(f >> s >> s) {
+		for(int i=0; i<s.size(); i+=2) {
+			string n;
+			n += s[i];
+			n += s[i+1];
+			memory[addr++] = stoi(n, nullptr, 16);
+		}
 	}
 	PC = start;
 }
 
 void Interpreter::show_mem()
 {
-	for(int i = start; i < end; i++) {
+	for(int i = data_begin, j = 0; i < end; i++, j++) {
 		cout << setfill('0') << setw(2) << hex << +memory[i];
-		if(i % 3 == 2) cout << ' ';
+		if(j % 3 == 2) cout << ' ';
 	}
 	cout << endl;
 }
@@ -42,8 +48,4 @@ void Interpreter::execute()
 	operand |= memory[PC + 2];
 	po_table[memory[PC]](operand);
 	PC.address += 3;
-}
-
-void Interpreter::fetch()
-{
 }

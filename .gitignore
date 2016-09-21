@@ -3,3 +3,8 @@
 *.x
 *.vim
 *.o
+*.gz
+*.aux
+*.log
+*.jpg
+

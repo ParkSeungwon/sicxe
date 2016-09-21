@@ -1,3 +1,4 @@
+//컴파일러가 만든 .o를 실행하는 인터프리터 헤더파일 
 #include"sic.h"
 
 class Interpreter : public SIC
@@ -12,6 +13,5 @@ protected:
 	void execute();
 
 private:
-	void fetch();
 };
 

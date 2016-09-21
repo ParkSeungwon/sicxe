@@ -10,7 +10,7 @@ all : $(OBJ) $(EXE)
 %.x : %.cpp $(OBJ) 
 	$(CC) $< -o $@ $(OBJ) $(CFLAG)
 
-%.o : %.cc 
+%.o : %.cc %.h
 	$(CC) $< -c $(CFLAG) 
 
 clean :

@@ -1,0 +1,65 @@
+\documentclass[11pt,a4paper,twocolumn,landscape]{article}
+\synctex=1
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1cm,left=0.5cm]{geometry}
+\usepackage{graphicx}
+%\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage{courier}
+\usepackage[hangul]{kotex}
+\linespread{1}
+
+\begin{document}
+\pagenumbering{gobble}
+\begin{center}
+	\Huge시스템 소프트웨어와 실습  과제\\
+	\vspace{2cm}
+\hfill\includegraphics[height=30pt]{logo.jpg}
+
+\hfill\Large 2016110056 불교학부 박승원
+
+\hfill\today
+\end{center}
+
+\noindent
+\lstset{columns=flexible, tabsize=4, frame=single, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\ttfamily\scriptsize}
+\begin{enumerate}
+\lstset{language=[x86masm]Assembler}
+\lstinputlisting{1.s}
+\lstinputlisting{1.o}
+	\lstinputlisting{2.s}
+		\lstinputlisting{2.o}
+		\lstinputlisting{1.txt}
+		\lstset{language=C}
+직접 수업시간에 들은 내용을 토대로 컴파일러와 실행인터프리터를 구현해 보았다.
+SIC시뮬레이터와 동일한 결과를 얻었다.
+그 소스 코드를 첨부한다.
+\lstinputlisting{sic.h}	
+\lstinputlisting{sic.cc}
+\lstinputlisting{compiler.h}
+\lstinputlisting{compiler.cc}
+\lstinputlisting{interpreter.h}
+\lstinputlisting{interpreter.cc}
+\lstinputlisting{compile.cpp}
+\lstinputlisting{run.cpp}
+
+
+\end{enumerate}
+
+{\Huge소감}
+\indent
+SIC 에뮬레이터의 연습을 통해 컴퓨터의 작동원리를 파악할 수 있었다.
+에뮬레이터는 굉장히 어려운 프로그래밍으로 생각했고, 하드웨어적인 지식이 많아야 
+하는 것으로 알고 있었는데, 
+직접 컴파일러를 작성해 보니 에뮬레이터가 생각보다 쉽게 구현이 되는 것에 놀랐다.
+하드웨어가 단순한 원리에 의해서 움직인다는 교수님의
+말씀을 이해할 수 있었다. 
+
+
+수업을 통해 정확한 지식을 얻고 작성해 보니, 어렴풋이 
+알고 있던 것들이 명확해졌고, 매우 성취감이 컸다. 
+지금은 아직 조건분기 등의 구현과 문자 데이터의 처리등은 만들지 않았지만,
+수업의 진도 대로 차근차근 만들어 보도록 해야겠다.
+클래스를 만들며 수업을 들으니 SIC의 작동원리를 구체적으로 이해할 수 있게 되는 것 같다.
+\end{document}

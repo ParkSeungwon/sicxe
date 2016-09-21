@@ -1,4 +1,5 @@
-#include<map>
+//컴파일러 구현부.
+#include<iostream>
 #include<iomanip>
 #include<string>
 #include<fstream>
@@ -12,6 +13,12 @@ Compiler::Compiler(string file)
 	make_obj_code();
 	file.back() = 'o';
 	create_object(file);
+	show_sym_table();
+}
+
+void Compiler::show_sym_table()
+{
+	for(auto& a : sym_table) cout << a.first << " : " << hex << a.second << endl;
 }
 
 void Compiler::create_object(string file)
@@ -21,9 +28,9 @@ void Compiler::create_object(string file)
 	f << "data " << hex << setfill('0') << setw(4) << sym_table["data_begin"] << endl;
 	f << "end " << hex << setfill('0') << setw(4) << sym_table["end"] << endl;
 	for(auto& a : obj_code) {
-		f << hex << setfill('0') << setw(4) << a.first << ' ' 
-			<< hex << setfill('0') << setw(2) << +a.second.opcode 
-			<< hex <<setfill('0') << setw(4) << a.second.address << endl;
+		f << hex << setfill('0') << setw(4) << a.first << ' ' ;
+		for(auto& b : a.second) f << hex << setfill('0') << setw(2) << +b;
+		f << endl;
 	}
 }
 
@@ -34,28 +41,33 @@ void Compiler::make_obj_code()
 	for(auto& a : instructions) {
 		if(addr < sym_table["data_begin"]) {
 			if(started) {
-				obj_code.push_back( { addr, {+op_table[a[1]], 
-						is_symbol(a[2]) ? sym_table[a[2]] : stoi(a[2], nullptr, 16)}});
+				short two_part;
+				if(is_symbol(a[2])) two_part = sym_table[a[2]];
+				else two_part = stoi(a[2], nullptr, 16);
+				obj_code.push_back({addr, {+op_table[a[1]], two_part >> 8, two_part & 255}});
 				addr += 3;
 			}
 			if(a[1] == "start") started = true;
-		} 
-		else if(addr == sym_table["end"]) {
-			obj_code.push_back({addr, {0, 0}});
+		} else if(addr == sym_table["end"]) {
+			obj_code.push_back({addr, {0}});
 			break;
 		} else {
 			int k = stoi(a[2], nullptr, 16);
 			if(a[1] == "word") {
-				obj_code.push_back({addr, {k >> 16, k & 65535}});
+				obj_code.push_back({addr, {k >> 16, (k >> 8) & 255, k & 255}});
 				addr += 3;
 			} else if(a[1] == "byte") {
-				obj_code.push_back({addr, {k >> 16, k & 65535}});
+				obj_code.push_back({addr, {k}});
 				addr++;
 			} else if(a[1] == "resb") {
-				obj_code.push_back({addr, {0, 0}});
+				vector<unsigned char> v;
+				v.resize(k);
+				obj_code.push_back({addr, v});
 				addr += k;
 			} else if(a[1] == "resw") {
-				obj_code.push_back({addr, {0, 0}});
+				vector<unsigned char> v;
+				v.resize(3 * k);
+				obj_code.push_back({addr, v});
 				addr += 3 * k;
 			}
 		}
@@ -68,7 +80,7 @@ bool Compiler::is_symbol(string s)
 }
 
 void Compiler::make_sym_table()
-{
+{//심볼 테이블을 만든다.
 	int addr = 0;
 	bool data_begin = false;
 	for(auto& a : instructions) {
@@ -90,7 +102,6 @@ void Compiler::make_sym_table()
 			else if(a[1] == "resw") addr += 3 * stoi(a[2]);
 		}
 	}
-	//for(auto& a : sym_table) cout << a.first << ' ' << hex << a.second << endl;
 }
 		
 void Compiler::fill_instructions(string file)

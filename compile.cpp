@@ -1,6 +1,3 @@
-#include<map>
-#include<vector>
-#include<fstream>
 #include<iostream>
 #include"compiler.h"
 using namespace std;

@@ -1,10 +1,12 @@
+//sic/xe simulator 헤더파일입니다.
 #include<vector>
 #include<functional>
 #include<string>
 #include<map>
+
 struct Register//24 bit 
 {
-	char opcode;
+	unsigned char opcode;
 	short address;//1 bit(direct0, indexed 1) + 15 bit address
 	Register& operator=(int n);
 	operator int(); 
@@ -52,17 +54,25 @@ public:
 	void RD(short);
 	void WD(short);
 
+	//char handle
+	void LDCH(short);
+	void STCH(short);
+
 protected:
-	char memory[32768];//2**15
+	unsigned char memory[32768];//2**15
 	bool is_opcode(std::string s);
-	std::map<std::string, char> op_table = {
+	int fetch(short addr) const;
+
+	std::map<std::string, unsigned char> op_table = {
 		{"lda", 0x00}, {"ldx", 0x04}, {"sta", 0x0c}, {"stx", 0x10},
 		{"add", 0x18}, {"sub", 0x1c}, {"mul", 0x20}, {"div", 0x24},
 		{"comp", 0x28}, {"jeq", 0x30}, {"jgt", 0x34}, {"jlt", 0x38},
 		{"jsub", 0x48}, {"rsub", 0x4c},
-		{"rd", 0xd8}, {"wd", 0xdc}, {"td", 0xe0}
+		{"rd", 0xd8}, {"wd", 0xdc}, {"td", 0xe0},
+		{"ldch", 0xe4}, {"stch", 0xe8}
 	};
-	std::map<char, std::function<void(short)>> po_table = {
+
+	std::map<unsigned char, std::function<void(short)>> po_table = {
 		{0x00, std::bind(&SIC::LDA, this, std::placeholders::_1)},
 		{0x04, std::bind(&SIC::LDX, this, std::placeholders::_1)},
 		{0x0c, std::bind(&SIC::STA, this, std::placeholders::_1)},
@@ -79,10 +89,11 @@ protected:
 		{0x4c, std::bind(&SIC::RSUB, this, std::placeholders::_1)},
 		{0xd8, std::bind(&SIC::RD, this, std::placeholders::_1)},
 		{0xdc, std::bind(&SIC::WD, this, std::placeholders::_1)},
-		{0xe0, std::bind(&SIC::TD, this, std::placeholders::_1)}
+		{0xe0, std::bind(&SIC::TD, this, std::placeholders::_1)},
+		{0xe4, std::bind(&SIC::LDCH, this, std::placeholders::_1)},
+		{0xe8, std::bind(&SIC::STCH, this, std::placeholders::_1)}
 	};
 
 private:
-	int fetch(short addr) const;
 };
 
