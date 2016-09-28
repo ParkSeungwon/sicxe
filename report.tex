@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 %\usepackage{verbatim}
 \usepackage{listings}
+\usepackage{multicol}
 \usepackage{textcomp}
 \usepackage{courier}
 \usepackage[hangul]{kotex}
@@ -12,54 +13,95 @@
 
 \begin{document}
 \pagenumbering{gobble}
+
 \begin{center}
-	\Huge시스템 소프트웨어와 실습  과제\\
-	\vspace{2cm}
-\hfill\includegraphics[height=30pt]{logo.jpg}
-
-\hfill\Large 2016110056 불교학부 박승원
-
-\hfill\today
+	\vspace*{2cm}
+	{\Huge 시스템 소프트웨어
+		\vspace{1cm}
+		
+실습 과제\\}
+	\vspace{3cm}	
+	
+	\LARGE
+	\begin{tabular}{rl}
+		학번 : & 2016110056\\ 
+		학과 : & 불교학부 \\
+		이름 : & 박승원\\
+		날짜 : & \today
+	\end{tabular}
+	\vspace{1cm}
+	
+	\includegraphics[width=0.1\textwidth]{logo.jpg}
+	
 \end{center}
-
+\newpage
 \noindent
 \lstset{columns=flexible, tabsize=4, frame=single, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\ttfamily\scriptsize}
 \begin{enumerate}
+
+
 \lstset{language=[x86masm]Assembler}
-\lstinputlisting{1.s}
-\lstinputlisting{1.o}
-	\lstinputlisting{2.s}
-		\lstinputlisting{2.o}
-		\lstinputlisting{1.txt}
+%\begin{multicols}{2}
+\item 다음에 주어진 SIC/XE 프로그램을 입력하고, 실습하시오.(LISTFILE의 내용을 참고해서 각 label의 주소를 파악하고, 실행하면서 메모리와 register 들의 값의 변화를 관찰한다.)
+
+
+\lstinputlisting{4.s}
+1번 문제의 생성된 목적코드
+\lstinputlisting{4.o}
+각 실행 라인에서의 레지스터와 데이터의 값.
+\lstinputlisting{1.txt}
+레지스터를 보면 PC가 순환하는 것과 데이터의 값이 누적되는 것을 확인할 수 있다.\\
+$4\rightarrow 7\rightarrow 9\rightarrow a$
+\\
+\item newd의 위치에서부터 차례대로 저장되어 있는 5개의 데이터 \{2,2,2,2,2\}을 모두 합하여 sum2에 저장하는 프로그램을 작성하고, 실습하시오.(위 프로그램을 수정한다.)
+프로그램의 작성 예..
+
+\lstinputlisting{5.s}
+2번 문제의 생성된 목적코드 
+\lstinputlisting{5.o}
+각 실행 라인에서의 레지스터와 데이터의 값.
+\lstinputlisting{2.txt}
+마찬가지로 PC가 순환하는 것과 값이 누적되는 것을 확인할 수 있다. 그리고, 마지막에는 a, 십진수로 10이 결과로 나오는 것을 확인할 수 있다.
+%\end{multicols}
+\newpage
+컴파일 후의 심볼테이블(푸른 테두리)과 실행 전후의 데이터 영역(붉은 색이 구하고자 하는 값).\\
+\vspace{1cm}
+\includegraphics[width=0.5\textwidth]{2.png}
 		\lstset{language=C}
-직접 수업시간에 들은 내용을 토대로 컴파일러와 실행인터프리터를 구현해 보았다.
-SIC시뮬레이터와 동일한 결과를 얻었다.
-그 소스 코드를 첨부한다.
-\lstinputlisting{sic.h}	
-\lstinputlisting{sic.cc}
-\lstinputlisting{compiler.h}
-\lstinputlisting{compiler.cc}
-\lstinputlisting{interpreter.h}
-\lstinputlisting{interpreter.cc}
-\lstinputlisting{compile.cpp}
-\lstinputlisting{run.cpp}
+\newpage
+지난 시간에 만든 것에 X레지스터의 값을 더하여 메모리를 액세스하는 부분과 COMP, JLT를 더하였다.
+약간의 수정을 가하여, 에뮬레이터를 조금 변경하였다.
+
+\begin{lstlisting}[language=C++]
+void SIC::COMP(short addr) 
+{
+	int n = fetch(addr);
+	int a = A;
+	if(a < n) SW.opcode = 1;
+	else SW.opcode = 0;
+}
+
+void SIC::JLT(short addr) 
+{
+	if(SW.opcode == 1) PC.address = addr-3;
+}
+
+void SIC::ADDX(short addr)
+{
+	int a = A;
+	int x = X;
+	int k = fetch(addr + x);
+	A = a + k;
+}
+
+\end{lstlisting}
 
 
 \end{enumerate}
 
 {\Huge소감}
 \indent
-SIC 에뮬레이터의 연습을 통해 컴퓨터의 작동원리를 파악할 수 있었다.
-에뮬레이터는 굉장히 어려운 프로그래밍으로 생각했고, 하드웨어적인 지식이 많아야 
-하는 것으로 알고 있었는데, 
-직접 컴파일러를 작성해 보니 에뮬레이터가 생각보다 쉽게 구현이 되는 것에 놀랐다.
-하드웨어가 단순한 원리에 의해서 움직인다는 교수님의
-말씀을 이해할 수 있었다. 
-
-
-수업을 통해 정확한 지식을 얻고 작성해 보니, 어렴풋이 
-알고 있던 것들이 명확해졌고, 매우 성취감이 컸다. 
-지금은 아직 조건분기 등의 구현과 문자 데이터의 처리등은 만들지 않았지만,
-수업의 진도 대로 차근차근 만들어 보도록 해야겠다.
-클래스를 만들며 수업을 들으니 SIC의 작동원리를 구체적으로 이해할 수 있게 되는 것 같다.
+수업시간에 배우지 않은 부분인 조건분기와 X레지스터의 값을 참조하여 더하는 명령어가 나와 애를 먹었다.
+조건문은 잠정적으로 SW레지스터의 opcode를 1로 셋팅하는 것으로 설정하고, addx라는 opcode를 추가하여 프로그램을 만들어 보았다. 
+소오스가 끝에 trailing하는 스페이스가 있을 경우 제대로 작동하지 않는 점도 발견하였다. 
 \end{document}

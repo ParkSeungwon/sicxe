@@ -30,10 +30,10 @@ Register& Register::operator=(int n)
 
 Register::operator int()
 {
-	int tmp = opcode;
-	tmp <<= 16;
-	tmp |= address;
-	return tmp;
+	int r = opcode;
+	r <<= 16;
+	r |= address;
+	return r;
 }
 
 int SIC::fetch(short addr) const
@@ -63,6 +63,14 @@ void SIC::ADD(short addr)
 	int a = A;
 	A = a + n;
 }
+void SIC::ADDX(short addr)
+{
+	int a = A;
+	int x = X;
+	int k = fetch(addr + x);
+	A = a + k;
+}
+
 void SIC::SUB(short addr)
 {
 	int n = fetch(addr);
@@ -92,10 +100,19 @@ void SIC::DIV(short addr)
 	int a = A;
 	A = a / n;
 }
-void SIC::COMP(short addr) {}
+void SIC::COMP(short addr) 
+{
+	int n = fetch(addr);
+	int a = A;
+	if(a < n) SW.opcode = 1;
+	else SW.opcode = 0;
+}
 void SIC::JEQ(short addr) {}
 void SIC::JGT(short addr) {}
-void SIC::JLT(short addr) {}
+void SIC::JLT(short addr) 
+{
+	if(SW.opcode == 1) PC.address = addr-3;
+}
 void SIC::JSUB(short addr) {}
 void SIC::RSUB(short addr) {}
 void SIC::RD(short addr) {}

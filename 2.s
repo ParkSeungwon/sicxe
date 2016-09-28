@@ -8,5 +8,5 @@ first	lda data1
 data1 word 8
 data2 word 7
 sum resw 1
-diff resw 1
+diff resw 4
 	end	first

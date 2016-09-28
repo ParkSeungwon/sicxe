@@ -9,8 +9,9 @@ using namespace std;
 Compiler::Compiler(string file)
 {
 	fill_instructions(file);
-	make_sym_table();
-	make_obj_code();
+//	for(auto& a : instructions) cout << a[0] << ' ' << a[1] << ' ' << a[2] << endl;
+	make_sym_table();//PASS 1
+	make_obj_code();//PASS 2
 	file.back() = 'o';
 	create_object(file);
 	show_sym_table();
@@ -18,7 +19,9 @@ Compiler::Compiler(string file)
 
 void Compiler::show_sym_table()
 {
-	for(auto& a : sym_table) cout << a.first << " : " << hex << a.second << endl;
+	multimap<short, string> m;
+	for(auto a : sym_table) m.insert({a.second, a.first});
+	for(auto& a : m) cout << hex << a.first << " : " << a.second << endl;
 }
 
 void Compiler::create_object(string file)
@@ -81,10 +84,10 @@ bool Compiler::is_symbol(string s)
 
 void Compiler::make_sym_table()
 {//심볼 테이블을 만든다.
-	int addr = 0;
+	int addr = 0;//addr == LOCCTR
 	bool data_begin = false;
 	for(auto& a : instructions) {
-		if(a[0] != "") sym_table[a[0]] = addr;
+		if(a[0] != "") sym_table[a[0]] = addr;//symtab 중복체크 해야한다.
 		if(a[1] == "start") {
 			addr = stoi(a[2], nullptr, 16);
 			sym_table["start"] = addr;
@@ -101,7 +104,7 @@ void Compiler::make_sym_table()
 			else if(a[1] == "resb") addr += stoi(a[2]);
 			else if(a[1] == "resw") addr += 3 * stoi(a[2]);
 		}
-	}
+	}//return LOCCTR- starting address = program size to load to memory
 }
 		
 void Compiler::fill_instructions(string file)

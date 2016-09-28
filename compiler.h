@@ -7,8 +7,8 @@ public:
 	Compiler(std::string filename);
 
 protected:
-	void make_sym_table();
-	void make_obj_code();
+	void make_sym_table();//PASS 1
+	void make_obj_code();//PASS 2
 	bool is_symbol(std::string s);
 	void create_object(std::string file);
 	void fill_instructions(std::string file);

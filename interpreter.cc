@@ -34,6 +34,7 @@ void Interpreter::load_to_memory(string file)
 
 void Interpreter::show_mem()
 {
+	cout << "A : " << hex << A << ", X : " << hex << X << ", PC : " << PC << endl;
 	for(int i = data_begin, j = 0; i < end; i++, j++) {
 		cout << setfill('0') << setw(2) << hex << +memory[i];
 		if(j % 3 == 2) cout << ' ';
@@ -46,6 +47,7 @@ void Interpreter::execute()
 	short operand = memory[PC + 1];
 	operand <<= 8;
 	operand |= memory[PC + 2];
+	show_mem();
 	po_table[memory[PC]](operand);
 	PC.address += 3;
 }
