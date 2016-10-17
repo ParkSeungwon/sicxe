@@ -18,5 +18,6 @@ delta resw 1
 incr word 3
 cha resb 1
 charx byte 78
+cha resb 1
 	end first
 

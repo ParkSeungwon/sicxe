@@ -1,107 +1,73 @@
-\documentclass[11pt,a4paper,twocolumn,landscape]{article}
+\documentclass[12pt,a4paper]{article}
 \synctex=1
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1cm,left=0.5cm]{geometry}
+\usepackage[margin=2cm]{geometry}
 \usepackage{graphicx}
 %\usepackage{verbatim}
 \usepackage{listings}
 \usepackage{multicol}
+\usepackage{libertine}
+\usepackage{pgfornament}
+\usepackage{eso-pic}
 \usepackage{textcomp}
 \usepackage{courier}
 \usepackage[hangul]{kotex}
-\linespread{1}
+\linespread{1.3}
 
-\begin{document}
-\pagenumbering{gobble}
-
-\begin{center}
-	\vspace*{2cm}
-	{\Huge 시스템 소프트웨어
-		\vspace{1cm}
-		
-실습 과제\\}
-	\vspace{3cm}	
-	
+\title{
+	\centering
+	\pgfornament[width=12cm,color=teal]{84}\\
+	\vspace{1cm}
+	\fontsize{50}{50} \selectfont {시스템 S/W 실습4}\\
+	\pgfornament[width=12cm,color=teal]{88}\\
+	\vfill}
+\author{
 	\LARGE
 	\begin{tabular}{rl}
+		\hline
 		학번 : & 2016110056\\ 
 		학과 : & 불교학부 \\
 		이름 : & 박승원\\
-		날짜 : & \today
-	\end{tabular}
-	\vspace{1cm}
-	
-	\includegraphics[width=0.1\textwidth]{logo.jpg}
-	
-\end{center}
-\newpage
+		날짜 : & \today\\
+		\hline
+	\end{tabular}\vspace{2cm}
+	\\
+	\includegraphics[width=0.5\textwidth]{logo.jpg}
+}
+\date{}
+
+\begin{document}
+\maketitle
 \noindent
-\lstset{columns=flexible, tabsize=4, frame=single, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\ttfamily\scriptsize}
+\lstset{columns=flexible, tabsize=4, frame=single, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\ttfamily\normal}
 \begin{enumerate}
 
 
-\lstset{language=[x86masm]Assembler}
+\lstset{language=C}
 %\begin{multicols}{2}
-\item 다음에 주어진 SIC/XE 프로그램을 입력하고, 실습하시오.(LISTFILE의 내용을 참고해서 각 label의 주소를 파악하고, 실행하면서 메모리와 register 들의 값의 변화를 관찰한다.)
+\item 다음에 주어진 프로그램 내용을 편집하여 test4.c로 저장하고, test4.c를 Compile 하여 object file test4를 생성하고, 입력 data file 'srcfile'을 준비하여 test4를 실행하시오. \\
+단 C Program compile 명령은 다음과 같고, test4의 입력파일 srcfile(SIC 어셈블리어 프로그램 파일)은 각자 준비한다.
 
+\$gcc -0 test4 test.c\\
+\$./test4 srcfile
 
-\lstinputlisting{4.s}
-1번 문제의 생성된 목적코드
-\lstinputlisting{4.o}
-각 실행 라인에서의 레지스터와 데이터의 값.
-\lstinputlisting{1.txt}
-레지스터를 보면 PC가 순환하는 것과 데이터의 값이 누적되는 것을 확인할 수 있다.\\
-$4\rightarrow 7\rightarrow 9\rightarrow a$
-\\
-\item newd의 위치에서부터 차례대로 저장되어 있는 5개의 데이터 \{2,2,2,2,2\}을 모두 합하여 sum2에 저장하는 프로그램을 작성하고, 실습하시오.(위 프로그램을 수정한다.)
-프로그램의 작성 예..
+\lstinputlisting[title=test4old.c]{test4old.c}
 
-\lstinputlisting{5.s}
-2번 문제의 생성된 목적코드 
-\lstinputlisting{5.o}
-각 실행 라인에서의 레지스터와 데이터의 값.
-\lstinputlisting{2.txt}
-마찬가지로 PC가 순환하는 것과 값이 누적되는 것을 확인할 수 있다. 그리고, 마지막에는 a, 십진수로 10이 결과로 나오는 것을 확인할 수 있다.
-%\end{multicols}
-\newpage
-컴파일 후의 심볼테이블(푸른 테두리)과 실행 전후의 데이터 영역(붉은 색이 구하고자 하는 값).\\
-\vspace{1cm}
-\includegraphics[width=0.5\textwidth]{2.png}
-		\lstset{language=C}
-\newpage
-지난 시간에 만든 것에 X레지스터의 값을 더하여 메모리를 액세스하는 부분과 COMP, JLT를 더하였다.
-약간의 수정을 가하여, 에뮬레이터를 조금 변경하였다.
+\item 위의 소오스 파일은 라벨의 길이에 제한이 있어서 좀 더 범용적으로 고쳐 보았다.
 
-\begin{lstlisting}[language=C++]
-void SIC::COMP(short addr) 
-{
-	int n = fetch(addr);
-	int a = A;
-	if(a < n) SW.opcode = 1;
-	else SW.opcode = 0;
-}
+\lstinputlisting[title=test4.c]{test4.c}
 
-void SIC::JLT(short addr) 
-{
-	if(SW.opcode == 1) PC.address = addr-3;
-}
+\item 실행 결과
+\\다음과 같은 4가지의 소오스 파일을 준비하여 실행해 보았다.
+\lstinputlisting[language=asm]{ss.s}
 
-void SIC::ADDX(short addr)
-{
-	int a = A;
-	int x = X;
-	int k = fetch(addr + x);
-	A = a + k;
-}
+다음과 같은 실행 결과를 얻었다.
 
-\end{lstlisting}
-
+\includegraphics[width=\textwidth]{1.png}
 
 \end{enumerate}
 
 {\Huge소감}
 \indent
-수업시간에 배우지 않은 부분인 조건분기와 X레지스터의 값을 참조하여 더하는 명령어가 나와 애를 먹었다.
-조건문은 잠정적으로 SW레지스터의 opcode를 1로 셋팅하는 것으로 설정하고, addx라는 opcode를 추가하여 프로그램을 만들어 보았다. 
-소오스가 끝에 trailing하는 스페이스가 있을 경우 제대로 작동하지 않는 점도 발견하였다. 
+실습내용이 그다지 많지 않아 7장 분량을 채우기가 힘들었다. 수업이 정상적으로 진도가 나가지 못하는 것 같아 안타깝다. 다음 주에도 쉰다니 시스템 소프트웨어는 매우 중요한 과목이라 들었는데, 교수님께서 바쁘시겠지만, 수업을 보충하는 시간을 내주시면 어떨까 하는 것이 개인적 바램입니다.
 \end{document}

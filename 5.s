@@ -2,7 +2,7 @@
 first lda zero
 loop ldx index
 	lda sum2
-	addx newd
+	addx newd 
 	sta sum2
 	lda index
 	add three

@@ -87,12 +87,14 @@ void Compiler::make_sym_table()
 	int addr = 0;//addr == LOCCTR
 	bool data_begin = false;
 	for(auto& a : instructions) {
-		if(a[0] != "") sym_table[a[0]] = addr;//symtab 중복체크 해야한다.
+		if(a[0] != "") {
+			if(sym_table.find(a[0]) != sym_table.end()) throw SICException(a[0] + " symbol appears twice");
+			else sym_table[a[0]] = addr;//symtab 중복체크 해야한다.
+		}
 		if(a[1] == "start") {
 			addr = stoi(a[2], nullptr, 16);
 			sym_table["start"] = addr;
-		} 
-		else if(a[1] == "end") sym_table["end"] = addr;
+		} else if(a[1] == "end") sym_table["end"] = addr;
 		else if(is_opcode(a[1])) addr += 3;
 		else {
 			if(!data_begin) {
@@ -127,6 +129,10 @@ void Compiler::fill_instructions(string file)
 			instructions.push_back({com[0], com[1], com[2]});
 			n = 0;
 			for(int i=0; i<3; i++) com[i].clear();
+			sp_flag = false;
 		}
+	}
+	for(auto& a : instructions) {
+		cout << a[0] << ' ' << a[1] << ' ' << a[2] << endl;
 	}
 }

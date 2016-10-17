@@ -12,6 +12,17 @@ struct Register//24 bit
 	operator int(); 
 };
 
+class SICException : public std::exception
+{
+public:
+	SICException(std::string s) : message(s) {}
+	virtual const char* what() const throw() {
+		return message.data();
+	}
+protected:
+	std::string message;
+};
+
 //typedef char byte;//byte c'z'
 //typedef char[3] word;//상수 정의 five(addr) word 5
 
@@ -70,7 +81,7 @@ protected:
 		{"comp", 0x28}, {"jeq", 0x30}, {"jgt", 0x34}, {"jlt", 0x38},
 		{"jsub", 0x48}, {"rsub", 0x4c},
 		{"rd", 0xd8}, {"wd", 0xdc}, {"td", 0xe0},
-		{"ldch", 0xe4}, {"stch", 0xe8}, {"addx", 0x19}
+		{"ldch", 0x50}, {"stch", 0x54}, {"addx", 0x19}
 	};
 
 	std::map<unsigned char, std::function<void(short)>> po_table = {
@@ -91,8 +102,8 @@ protected:
 		{0xd8, std::bind(&SIC::RD, this, std::placeholders::_1)},
 		{0xdc, std::bind(&SIC::WD, this, std::placeholders::_1)},
 		{0xe0, std::bind(&SIC::TD, this, std::placeholders::_1)},
-		{0xe4, std::bind(&SIC::LDCH, this, std::placeholders::_1)},
-		{0xe8, std::bind(&SIC::STCH, this, std::placeholders::_1)},
+		{0x50, std::bind(&SIC::LDCH, this, std::placeholders::_1)},
+		{0x54, std::bind(&SIC::STCH, this, std::placeholders::_1)},
 		{0x19, std::bind(&SIC::ADDX, this, std::placeholders::_1)}
 	};
 

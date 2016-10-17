@@ -113,8 +113,18 @@ void SIC::JLT(short addr)
 {
 	if(SW.opcode == 1) PC.address = addr-3;
 }
-void SIC::JSUB(short addr) {}
-void SIC::RSUB(short addr) {}
+void SIC::JSUB(short addr) 
+{
+	int pc = PC;
+	int k = fetch(addr);
+	L = pc;
+	PC = k - 3;
+}
+
+void SIC::RSUB(short addr) 
+{
+	PC = L - 3;
+}
 void SIC::RD(short addr) {}
 void SIC::WD(short addr) {}
 void SIC::TD(short addr) {}
