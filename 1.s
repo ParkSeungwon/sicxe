@@ -9,6 +9,7 @@ first lda   seven
 	sta delta
 	ldch charx
 	stch cha
+	jsub 2
 seven word 7
 two word 2
 alpha resw 1
@@ -18,6 +19,5 @@ delta resw 1
 incr word 3
 cha resb 1
 charx byte 78
-cha resb 1
 	end first
 
