@@ -30,7 +30,11 @@ void Linker::operator+=(Module m)
 		if(operand >= start) {
 			operand += offset;
 			ss << setfill('0') << setw(4) << hex << operand;
-		} else {
+		} else {//매우 제한적이지만 오브젝트파일은 숫자로 이름을 지어야 한다.
+			//그리고 그 파일명이 스타트 번지보다 작아야 한다.
+			//링커에 첫번째 매개변수로 들어오는 파일이 메인이 된다.
+			//서브루틴은 오브젝트파일의 숫자를 오퍼란드로 한다.
+			//이 부분은 서브루틴이라고 마크하는 부분이다.
 			ss << '<' << setfill('0') << setw(2) << hex << operand << '>';
 		}
 		ss >> a.second;

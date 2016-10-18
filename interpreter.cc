@@ -1,6 +1,7 @@
 //인터프리터 구현부.
 #include<fstream>
 #include<iostream>
+#include<sstream>
 #include<iomanip>
 #include"interpreter.h"
 using namespace std;
@@ -17,18 +18,12 @@ void Interpreter::load_to_memory(string file)
 {
 	ifstream f(file);
 	string s;
-	char c[5];
-	int addr, mnemonic;
+	int addr;
 	f >> s >> hex >> start >> s >> hex >> data_begin >> s >> hex >> end;
 	addr = start;
-	while(f >> s >> s) {
-		for(int i=0; i<s.size(); i+=2) {
-			string n;
-			n += s[i];
-			n += s[i+1];
-			memory[addr++] = stoi(n, nullptr, 16);
-		}
-	}
+	stringstream ss;
+	while(f >> s >> s) ss << s;
+	while(ss >> setw(2) >> s) memory[addr++] = stoi(s, nullptr, 16);
 	PC = start;
 }
 
