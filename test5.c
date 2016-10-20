@@ -19,8 +19,10 @@ int main(int argc, char *argv[]) {
 	if((wfd = fopen(argv[2], "w")) == NULL) {
 		fprintf(stderr, "%s %s: cannot open for reading: %s\n", argv[0], argv[1], strerror(errno));
 	}
+	int start = 997;
 	while(fgets(cline, 67, rfd) > 0) { //get a line from srcfile
 		cptr = cline;
+		start += 3;
 		if(*cptr != ' ' && *cptr != '\'' && *cptr != '\t') { //if label exist
 			int c = 0;
 			while(*cptr != '\n') {
@@ -30,8 +32,8 @@ int main(int argc, char *argv[]) {
 				}
 				fprintf(wfd, "%c", *cptr++);
 			}
-			fprintf(wfd, "\n");
-		}
+			fprintf(wfd, " : %d\n", start);
+		} 
 	}
 	fclose(rfd); //srcfile close
 	fclose(wfd);
