@@ -9,7 +9,6 @@ first lda   seven
 	sta delta
 	ldch charx
 	stch cha
-	jsub 2
 seven word 7
 two word 2
 alpha resw 1
