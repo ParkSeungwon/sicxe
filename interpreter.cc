@@ -9,9 +9,7 @@ using namespace std;
 Interpreter::Interpreter(string file)
 {
 	load_to_memory(file);
-	show_mem();
 	while(PC < data_begin) execute();
-	show_mem();
 }
 
 void Interpreter::load_to_memory(string file)
@@ -39,10 +37,10 @@ void Interpreter::show_mem()
 
 void Interpreter::execute()
 {
+	show_mem();
 	short operand = memory[PC + 1];
 	operand <<= 8;
 	operand |= memory[PC + 2];
-	show_mem();
 	po_table[memory[PC]](operand);
 	PC.address += 3;
 }
