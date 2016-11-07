@@ -1,11 +1,15 @@
 #include"pre.h"
 #include<fstream>
 #include<sstream>
+#include<iostream>
 using namespace std;
 
 PreProcessor::PreProcessor(string file)
 {
 	fill_instructions(file);
+	for(auto& a : instructions) 
+		if(a[1] == "byte" && (a[2][0] == 'C' || a[2][0] == 'c')) 
+			a[2] = to_string(a[2][2]-'\0'); 
 	for(auto& a : instructions) for(auto& b : a) for(auto& c : b) c = tolower(c);
 	Macro m;
 	for(int i=0; i<instructions.size(); i++) {
@@ -26,7 +30,6 @@ PreProcessor::PreProcessor(string file)
 			instructions.insert(instructions.begin() + i, 
 					instructions.begin() + macros[idx].start + 1,
 					instructions.begin() + macros[idx].end);
-
 		}
 	}
 	for(auto& a : macros) //strip definition part

@@ -3,10 +3,10 @@ macro mymacro a,b
 	ldch b
 MEND
 	START 1000
-	mymacro c,d
-	mymacro e,f
+	mymacro data,store
+	mymacro store,store
 	ldch data
 	stch store
 data byte 3
-store byte 1
+store byte C'A'
 	end
