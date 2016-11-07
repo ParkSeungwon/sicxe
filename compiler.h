@@ -7,6 +7,7 @@ public:
 	Compiler(std::string filename);
 
 protected:
+	Compiler() {}
 	void make_sym_table();//PASS 1
 	void make_obj_code();//PASS 2
 	bool is_symbol(std::string s);
