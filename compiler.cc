@@ -45,7 +45,11 @@ void Compiler::make_obj_code()
 		if(addr < sym_table["data_begin"]) {
 			if(started) {
 				short two_part;
-				if(is_symbol(a[2])) two_part = sym_table[a[2]];
+				auto pos = a[2].find(",x");
+				if(pos != string::npos) {
+					a[2] = a[2].erase(pos);
+					two_part = (1 << 15) | sym_table[a[2]];
+				} else if(is_symbol(a[2])) two_part = sym_table[a[2]];
 				else {
 					if(a[2] == "") two_part = 0;
 					else two_part = stoi(a[2], nullptr, 16);

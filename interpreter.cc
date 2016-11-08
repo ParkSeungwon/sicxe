@@ -42,10 +42,14 @@ void Interpreter::show_mem()
 
 void Interpreter::execute()
 {
-	show_mem();
+	//show_mem();
 	short operand = memory[PC + 1];
 	operand <<= 8;
 	operand |= memory[PC + 2];
+	if(operand < 0) {
+		operand ^= 1 << 15;
+		operand += X;
+	}
 	po_table[memory[PC]](operand);
 	PC.address += 3;
 }

@@ -1,8 +1,5 @@
  start 1000
- ldch byte
- ldx index
-loop stx index
- ldch index
+loop ldch string,x
  wd index
  jsub 20
  comp end_string
@@ -17,5 +14,4 @@ string byte 48
  byte 6f
  byte 2e
 end_string byte 2e
-index word 1021
  end 

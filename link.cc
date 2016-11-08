@@ -23,11 +23,17 @@ void Linker::operator+=(Module m)
 		ss << a.second;
 		char c[2];
 		ss >> c[0] >> c[1];
-		short operand;
+		int operand;
 		ss >> hex >> operand;
 		ss.clear();
 		ss << c[0] << c[1];
-		if(operand >= start) {
+	/*	if(operand & (1<<15)) {
+			cout << operand << endl;
+			operand ^= 1<<15;
+			operand += offset;
+			operand |= 1<<15;
+			ss << setfill('0') << setw(4) << operand;
+		} else*/ if(operand >= start) {
 			operand += offset;
 			ss << setfill('0') << setw(4) << hex << operand;
 		} else {//매우 제한적이지만 오브젝트파일은 숫자로 이름을 지어야 한다.
