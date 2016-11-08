@@ -6,19 +6,45 @@ void SIC::LDA(short addr)
 {
 	A = fetch(addr);
 }
+void SIC::LDL(short addr) {
+	L = fetch(addr);
+}
 
+void SIC::LDX(short addr) 
+{
+	X = fetch(addr);
+}
+void SIC::STX(short addr) 
+{
+	memory[addr] = X.opcode;
+	memory[addr + 1] = X.address >> 8;
+	memory[addr + 2] = X.address & 255;
+}
 void SIC::STA(short addr)
 {
 	memory[addr] = A.opcode;
 	memory[addr + 1] = A.address >> 8;
 	memory[addr + 2] = A.address & 255;
 }
+void SIC::STL(short addr)
+{
+	memory[addr] = L.opcode;
+	memory[addr + 1] = L.address >> 8;
+	memory[addr + 2] = L.address & 255;
+}
 
 bool SIC::is_opcode(string s)
 {
 	return op_table.find(s) != op_table.end();
 }
-
+void SIC::TIX(short addr) {
+	int x = X;
+	X = x + 1;
+	int a = A;
+	A = x + 1;
+	COMP(addr);
+	A = a;
+}
 Register& Register::operator=(int n)
 {
 	address = n & 65535;
@@ -47,16 +73,6 @@ int SIC::fetch(short addr) const
 	return r;
 }
 
-void SIC::LDX(short addr) 
-{
-	X = fetch(addr);
-}
-void SIC::STX(short addr) 
-{
-	memory[addr] = X.opcode;
-	memory[addr + 1] = X.address >> 8;
-	memory[addr + 2] = X.address & 255;
-}
 void SIC::ADD(short addr) 
 {
 	int n = fetch(addr);
@@ -104,14 +120,22 @@ void SIC::COMP(short addr)
 {
 	int n = fetch(addr);
 	int a = A;
-	if(a < n) SW.opcode = 1;
-	else SW.opcode = 0;
+	if(a == n) SW.opcode = 0;
+	else if(a < n) SW.opcode = 1;
+	else SW.opcode = 2;
 }
-void SIC::JEQ(short addr) {}
-void SIC::JGT(short addr) {}
+void SIC::JEQ(short addr) {
+	if(!SW.opcode) PC = fetch(addr) - 3;
+}
+void SIC::JGT(short addr) {
+	if(SW.opcode == 2) PC = fetch(addr) - 3;
+}
+void SIC::J(short addr) {
+	PC = fetch(addr) - 3;
+}
 void SIC::JLT(short addr) 
 {
-	if(SW.opcode == 1) PC.address = addr-3;
+	if(SW.opcode == 1) PC = fetch(addr) - 3;
 }
 void SIC::JSUB(short addr) 
 {

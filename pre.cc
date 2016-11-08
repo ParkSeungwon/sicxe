@@ -4,13 +4,20 @@
 #include<iostream>
 using namespace std;
 
-PreProcessor::PreProcessor(string file)
+PreProcessor::PreProcessor(string file, string out)
 {
 	fill_instructions(file);
-	for(auto& a : instructions) 
-		if(a[1] == "byte" && (a[2][0] == 'C' || a[2][0] == 'c')) 
-			a[2] = to_string(a[2][2]-'\0'); 
+
+	for(auto& a : instructions) {//byte C'A' 처리
+		if((a[1] == "byte" || a[1] == "BYTE") && tolower(a[2][0]) == 'c') {
+			stringstream ss;
+			ss << hex << a[2][2] - '\0';
+			a[2] = ss.str();
+		}
+	}
+
 	for(auto& a : instructions) for(auto& b : a) for(auto& c : b) c = tolower(c);
+	
 	Macro m;
 	for(int i=0; i<instructions.size(); i++) {
 		if(instructions[i][0] == "macro") {
@@ -25,40 +32,39 @@ PreProcessor::PreProcessor(string file)
 		}
 		int idx = is_macro(instructions[i][1]);
 		if(idx >= 0) {
-			change(idx, instructions[i][2]);//argument replace
+			auto v = change(idx, instructions[i][2]);//argument replace
 			instructions.erase(instructions.begin() + i);//sentence insert
-			instructions.insert(instructions.begin() + i, 
-					instructions.begin() + macros[idx].start + 1,
-					instructions.begin() + macros[idx].end);
+			instructions.insert(instructions.begin() + i, v.begin(), v.end());
 		}
 	}
+	
 	for(auto& a : macros) //strip definition part
 		instructions.erase(instructions.begin() + a.start, 
 				instructions.begin() + a.end + 1);
-	ofstream f(file + ".s");//write to file
+	
+	ofstream f(out);//write to file
 	for(auto& a : instructions) f << a[0] << ' ' << a[1] << ' ' << a[2] << endl;
 }
 
-int PreProcessor::is_macro(string name)
+int PreProcessor::is_macro(string name) const
 {
 	for(int i=0; i<macros.size(); i++) if(macros[i].name == name) return i;
 	return -1;
 }
 
-void PreProcessor::change(int idx, string args)
+vector<array<string, 3>> PreProcessor::change(int idx, string args) const
 {
 	stringstream ss{args};
 	string s;
 	vector<string> v;
 	while(getline(ss, s, ',')) v.push_back(s);
-	for(int i=macros[idx].start+1; i<macros[idx].end; i++) {
-		for(int j=0; j<macros[idx].args.size(); j++) {
-			for(int k=0; k<3; k++) {
-				if(instructions[i][k] == macros[idx].args[j])
-					instructions[i][k] = v[j];
-			}
-		}
-	}
-	macros[idx].args = v;
+
+	vector<array<string, 3>> r;
+	r.insert(r.begin(), instructions.begin() + macros[idx].start + 1,
+			instructions.begin() + macros[idx].end);
+	for(auto& a : r) 
+		for(int i=0; i<macros[idx].args.size(); i++) 
+			for(int j=0; j<3; j++) if(a[j] == macros[idx].args[i]) a[j] = v[i];
+	return r;	
 }
 

@@ -11,12 +11,12 @@ struct Macro
 class PreProcessor : public Compiler
 {
 public:
-	PreProcessor(std::string filename);
+	PreProcessor(std::string filename, std::string outfile);
 
 protected:
 	std::vector<Macro> macros;
 
 private:
-	void change(int, std::string);
-	int is_macro(std::string name);
+	std::vector<std::array<std::string, 3>> change(int, std::string) const;
+	int is_macro(std::string name) const;
 };

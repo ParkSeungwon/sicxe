@@ -103,8 +103,8 @@ void Compiler::make_sym_table()
 			}
 			if(a[1] == "word") addr += 3;
 			else if(a[1] == "byte") addr++;
-			else if(a[1] == "resb") addr += stoi(a[2]);
-			else if(a[1] == "resw") addr += 3 * stoi(a[2]);
+			else if(a[1] == "resb") addr += stoi(a[2], nullptr, 16);
+			else if(a[1] == "resw") addr += 3 * stoi(a[2], nullptr, 16);
 		}
 	}//return LOCCTR- starting address = program size to load to memory
 }
@@ -131,8 +131,5 @@ void Compiler::fill_instructions(string file)
 			for(int i=0; i<3; i++) com[i].clear();
 			sp_flag = false;
 		}
-	}
-	for(auto& a : instructions) {
-		cout << a[0] << ' ' << a[1] << ' ' << a[2] << endl;
 	}
 }

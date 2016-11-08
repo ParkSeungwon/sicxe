@@ -1,6 +1,7 @@
 #include"pre.h"
-
+#include<iostream>
 int main(int c, char** v)
 {
-	PreProcessor{v[1]};
+	if(c<3) std::cout << "usage : " << v[0] << " [infile] [outfile]" << std::endl;
+	else PreProcessor{v[1], v[2]};
 }

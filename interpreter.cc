@@ -27,10 +27,15 @@ void Interpreter::load_to_memory(string file)
 
 void Interpreter::show_mem()
 {
-	cout << "A : " << hex << A << ", X : " << hex << X << ", PC : " << PC << endl;
+	cout << "A : " << setfill('0') << setw(6) << hex << A;
+	cout << ", X : " << setfill('0') << setw(6) << hex << X;
+	cout << ", L : " << setfill('0') << setw(6) << hex << L;
+	cout << ", PC : " << setfill('0') << setw(6) << hex << PC;
+	cout << ", SW : " << setfill('0') << setw(6) << hex << SW << endl;
 	for(int i = data_begin, j = 0; i < end; i++, j++) {
 		cout << setfill('0') << setw(2) << hex << +memory[i];
 		if(j % 3 == 2) cout << ' ';
+		if(j % 30 == 29) cout << endl;
 	}
 	cout << endl;
 }

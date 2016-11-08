@@ -8,6 +8,6 @@
  ldch data
  stch store
 data byte 3
-store byte 65
-fix byte 66
+store byte 41
+fix byte 74
  end 
