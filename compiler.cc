@@ -46,7 +46,10 @@ void Compiler::make_obj_code()
 			if(started) {
 				short two_part;
 				if(is_symbol(a[2])) two_part = sym_table[a[2]];
-				else two_part = stoi(a[2], nullptr, 16);
+				else {
+					if(a[2] == "") two_part = 0;
+					else two_part = stoi(a[2], nullptr, 16);
+				}
 				obj_code.push_back({addr, {+op_table[a[1]], two_part >> 8, two_part & 255}});
 				addr += 3;
 			}
@@ -55,7 +58,7 @@ void Compiler::make_obj_code()
 			obj_code.push_back({addr, {0}});
 			break;
 		} else {
-			int k = stoi(a[2], nullptr, 16);
+			int k = a[2] == "" ? sym_table["end"] : stoi(a[2], nullptr, 16);//""->rsub
 			if(a[1] == "word") {
 				obj_code.push_back({addr, {k >> 16, (k >> 8) & 255, k & 255}});
 				addr += 3;
@@ -113,7 +116,7 @@ void Compiler::fill_instructions(string file)
 {
 	ifstream f(file);
 	char c;
-	string com[3];
+	string com[20];
 	int n = 0;
 	bool sp_flag = false;
 	while(f >> noskipws >> c) {

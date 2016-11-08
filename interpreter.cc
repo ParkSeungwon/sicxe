@@ -9,7 +9,7 @@ using namespace std;
 Interpreter::Interpreter(string file)
 {
 	load_to_memory(file);
-	while(PC < data_begin) execute();
+	while(PC != data_begin) execute();
 }
 
 void Interpreter::load_to_memory(string file)

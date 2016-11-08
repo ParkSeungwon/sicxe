@@ -1,4 +1,5 @@
 //SIC/XE 구현부
+#include<iostream>
 #include"sic.h"
 using namespace std;
 
@@ -37,6 +38,7 @@ bool SIC::is_opcode(string s)
 {
 	return op_table.find(s) != op_table.end();
 }
+
 void SIC::TIX(short addr) {
 	int x = X;
 	X = x + 1;
@@ -47,10 +49,8 @@ void SIC::TIX(short addr) {
 }
 Register& Register::operator=(int n)
 {
-	address = n & 65535;
-	n <<= 8;
-	n >>= 24;
-	opcode = n;
+	address = n & 0xffff;
+	opcode = (n & 0xff0000) >> 16;
 	return *this;
 }
 
@@ -125,32 +125,38 @@ void SIC::COMP(short addr)
 	else SW.opcode = 2;
 }
 void SIC::JEQ(short addr) {
-	if(!SW.opcode) PC = fetch(addr) - 3;
+	if(!SW.opcode) PC = addr - 3;
 }
 void SIC::JGT(short addr) {
-	if(SW.opcode == 2) PC = fetch(addr) - 3;
+	if(SW.opcode == 2) PC = addr - 3;
 }
 void SIC::J(short addr) {
-	PC = fetch(addr) - 3;
+	PC = addr - 3;
 }
 void SIC::JLT(short addr) 
 {
-	if(SW.opcode == 1) PC = fetch(addr) - 3;
+	if(SW.opcode == 1) PC = addr - 3;
 }
 void SIC::JSUB(short addr) 
 {
 	int pc = PC;
-	int k = fetch(addr);
+	int k = addr;
 	L = pc;
 	PC = k - 3;
 }
 
 void SIC::RSUB(short addr) 
 {
-	PC = L - 3;
+	PC = L;
 }
-void SIC::RD(short addr) {}
-void SIC::WD(short addr) {}
+void SIC::RD(short addr) {
+	char c;
+	cin >> c;	
+	A = (int)c;
+}
+void SIC::WD(short addr) {
+	cout << (char)(A.address & 0xff);
+}
 void SIC::TD(short addr) {}
 
 

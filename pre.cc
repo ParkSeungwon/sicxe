@@ -8,11 +8,25 @@ PreProcessor::PreProcessor(string file, string out)
 {
 	fill_instructions(file);
 
-	for(auto& a : instructions) {//byte C'A' 처리
-		if((a[1] == "byte" || a[1] == "BYTE") && tolower(a[2][0]) == 'c') {
+	for(int i=0; i<instructions.size(); i++) {//byte C'A' 처리
+		if((instructions[i][1] == "byte" || instructions[i][1] == "BYTE") 
+				&& instructions[i][2][1] == '\'') {
+			vector<array<string, 3>> v;
 			stringstream ss;
-			ss << hex << a[2][2] - '\0';
-			a[2] = ss.str();
+			char c;
+			ss << instructions[i][2];
+			ss >> c >> c >> c;
+			while(c != '\'') {
+				stringstream ss2;
+				ss2 << hex << (c - '\0');
+				string s;
+				ss2 >> s; 
+				if(v.empty()) v.push_back({instructions[i][0], "byte", s});
+				else v.push_back({"", "byte", s});
+				ss >> noskipws >> c;
+			}
+			instructions.erase(instructions.begin() + i);
+			instructions.insert(instructions.begin() + i, v.begin(), v.end());
 		}
 	}
 

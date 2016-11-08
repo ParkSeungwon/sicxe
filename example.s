@@ -13,12 +13,11 @@ ENDFIL   LDA      EOF
 	JSUB      WRREC        
     LDL       RETADR       
     RSUB
-EOF          BYTE      C'E'
-	BYTE      C'O'
-	BYTE      C'F'
+EOF          BYTE      C'EOF'
 THREE      WORD    3 
 ZERO        WORD    0
 RETADR   RESW     1
 LENGTH   RESW     1
 BUFFER    RESB      4096         
+extra	byte c'this_is_a_test_string'
    end

@@ -63,7 +63,7 @@ void Linker::write_file()
 {
 	ofstream f(to_string(module_num) + ".x");
 	f << "start " << hex << start << endl << "data " << hex << data << endl << "end " << hex << end << endl;
-	for(auto& a : lines) f << hex << a.first << ' ' << a.second << endl;
+	for(auto& a : lines) f << hex << setw(4) << setfill('0') << a.first << ' ' << a.second << endl;
 }
 
 
