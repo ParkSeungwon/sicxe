@@ -35,6 +35,7 @@ protected:
 	unsigned char memory[32768];//2**15
 	bool is_opcode(std::string s);
 	int fetch(short addr) const;
+	void store(short addr, Register r);
 
 	std::map<std::string, unsigned char> op_table = {
 		{"lda", 0x00}, {"ldx", 0x04}, {"ldl", 0x08},
