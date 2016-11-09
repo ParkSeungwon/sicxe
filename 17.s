@@ -21,5 +21,5 @@ string byte 48
  byte 21
 end_string byte 0
  byte 0
- word c'!'
+ byte 21
  end 

@@ -4,7 +4,7 @@
 class Compiler : public SIC
 {
 public:
-	Compiler(std::string filename);
+	Compiler(std::string filename, std::string out);
 
 protected:
 	Compiler() {}

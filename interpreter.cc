@@ -6,10 +6,10 @@
 #include"interpreter.h"
 using namespace std;
 
-Interpreter::Interpreter(string file)
+Interpreter::Interpreter(string file, bool debug)
 {
 	load_to_memory(file);
-	while(PC != data_begin) execute();
+	while(PC != data_begin) execute(debug);
 }
 
 void Interpreter::load_to_memory(string file)
@@ -40,9 +40,9 @@ void Interpreter::show_mem()
 	cout << endl;
 }
 
-void Interpreter::execute()
+void Interpreter::execute(bool debug)
 {
-	//show_mem();
+	if(debug) show_mem();
 	short operand = memory[PC + 1];
 	operand <<= 8;
 	operand |= memory[PC + 2];

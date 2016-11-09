@@ -1,16 +1,13 @@
  start 1000
- ldch byte
- ldx index
-loop stx index
- ldch index
- wd index
- jsub 20
- comp end_string
- jeq quit
- j loop
-quit lda index 
-data word 0
-string byte c'Hello.'
-end_string byte c'.'
-index word 1021
- end
+ sta backup
+ stx backup2
+ lda backup2
+ add one
+ sta backup2
+ lda backup
+ ldx backup2
+ rsub 
+backup word 0
+backup2 word 0
+one word 1
+ end 

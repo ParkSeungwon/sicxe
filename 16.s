@@ -5,12 +5,11 @@ loop ldch string,x
  comp end_string
  jeq quit
  j loop
-quit lda string
-data word 0
+quit word 0
 string byte c'Hello'
  byte 20
  byte c'World!'
 end_string byte 0
  byte 0
- word c'!'
+ byte c'!'
  end 

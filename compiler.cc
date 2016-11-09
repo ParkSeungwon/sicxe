@@ -6,15 +6,14 @@
 #include"compiler.h"
 using namespace std;
 
-Compiler::Compiler(string file)
+Compiler::Compiler(string file, string out)
 {
 	fill_instructions(file);
 //	for(auto& a : instructions) cout << a[0] << ' ' << a[1] << ' ' << a[2] << endl;
 	make_sym_table();//PASS 1
 	make_obj_code();//PASS 2
-	file.back() = 'o';
-	create_object(file);
-	show_sym_table();
+	create_object(out);
+	//show_sym_table();
 }
 
 void Compiler::show_sym_table()

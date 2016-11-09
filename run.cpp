@@ -8,5 +8,6 @@ int main(int c, char** v)
 		cout << "usage : " << v[0] << " [file to run .o]" << endl;
 		return 0;
 	}
-	Interpreter inter(v[1]);
+	bool debug = c == 3 ? true : false;
+	Interpreter inter(v[1], debug);
 }
