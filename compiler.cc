@@ -3,6 +3,7 @@
 #include<iomanip>
 #include<string>
 #include<fstream>
+#include<sstream>
 #include"compiler.h"
 using namespace std;
 
@@ -43,10 +44,10 @@ void Compiler::make_obj_code()
 	bool started = false;
 	for(auto& a : instructions) {
 		if(a[1] == "jsub") {
-			vector<unsigned char> v;
-			v.push_back(+op_table[a[1]]);
-			for(auto& c : a[2]) v.push_back(c);
-			obj_code.push_back({addr, v});
+			stringstream ss;
+			ss << setw(2) << setfill('0') << hex << +op_table[a[1]];
+			ss << a[2];
+			obj_code.push_back({addr, ss.str()});
 			addr += 3;
 		} else if(addr < sym_table["data_begin"]) {
 			if(started) {
@@ -57,30 +58,37 @@ void Compiler::make_obj_code()
 					two_part = (1 << 15) | sym_table[a[2]];
 				} else if(is_symbol(a[2])) two_part = sym_table[a[2]];
 				else if(a[2] == "") two_part = 0;
-				obj_code.push_back({addr, {+op_table[a[1]], two_part >> 8, two_part & 255}});
+				stringstream ss;
+				ss << hex << setw(2) << setfill('0') << +op_table[a[1]];
+				ss << setw(4) << setfill('0') << hex << two_part;
+				obj_code.push_back({addr, ss.str()});
 				addr += 3;
 			}
 			if(a[1] == "start") started = true;
 		} else if(addr == sym_table["end"]) {
-			obj_code.push_back({addr, {0}});
+			obj_code.push_back({addr, "00"});
 			break;
 		} else {
 			int k = a[2] == "" ? 0 : stoi(a[2], nullptr, 16);
 			if(a[1] == "word") {
-				obj_code.push_back({addr, {k >> 16, (k >> 8) & 255, k & 255}});
+				stringstream ss;
+				ss << setw(6) << setfill('0') << a[2];
+				obj_code.push_back({addr, ss.str()});
 				addr += 3;
 			} else if(a[1] == "byte") {
-				obj_code.push_back({addr, {k}});
+				stringstream ss;
+				ss << setw(2) << setfill('0') << a[2];
+				obj_code.push_back({addr, ss.str()});
 				addr++;
 			} else if(a[1] == "resb") {
-				vector<unsigned char> v;
-				v.resize(k);
-				obj_code.push_back({addr, v});
+				stringstream ss;
+				ss << setw(k) << setfill('0') << 0;
+				obj_code.push_back({addr, ss.str()});
 				addr += k;
 			} else if(a[1] == "resw") {
-				vector<unsigned char> v;
-				v.resize(3 * k);
-				obj_code.push_back({addr, v});
+				stringstream ss;
+				ss << setw(k * 3) << setfill('0') << 0;
+				obj_code.push_back({addr, ss.str()});
 				addr += 3 * k;
 			}
 		}

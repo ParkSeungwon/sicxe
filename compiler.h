@@ -17,6 +17,6 @@ protected:
 
 	std::map<std::string, short> sym_table;
 	std::vector<std::array<std::string, 3>> instructions;
-	std::vector<std::pair<short, std::vector<unsigned char>>> obj_code;
+	std::vector<std::pair<short, std::string>> obj_code;
 };
 
