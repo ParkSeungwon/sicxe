@@ -16,12 +16,12 @@ void Interpreter::load_to_memory(string file)
 {
 	ifstream f(file);
 	string s;
-	int addr;
 	f >> s >> hex >> start >> s >> hex >> data_begin >> s >> hex >> end;
-	addr = start;
+	int addr = start;
 	stringstream ss;
 	while(f >> s >> s) ss << s;
-	while(ss >> setw(2) >> s) memory[addr++] = stoi(s, nullptr, 16);
+	while(ss >> setw(2) >> s) cout << setw(2) << setfill('0') << hex << +(memory[addr++] = stoi(s, nullptr, 16));
+		
 	PC = start;
 }
 
@@ -50,6 +50,10 @@ void Interpreter::execute()
 		operand ^= 1 << 15;
 		operand += X;
 	}
+	if(PC == 0x1022) {
+		for(int i=0x1000; i<0x1025; i++) 
+			cout << hex << i << ':' << hex << +memory[i] << endl;
+	}
 	po_table[memory[PC]](operand);
-	PC.address += 3;
+	PC = PC + 3;
 }

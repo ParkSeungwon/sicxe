@@ -46,7 +46,6 @@ public:
 	
 	//arithmetic
 	void ADD(short); 
-	void ADDX(short);
 	void SUB(short); 
 	void MUL(short); 
 	void DIV(short);
@@ -86,7 +85,7 @@ protected:
 		{"comp", 0x28}, {"tix", 0x2c},
 		{"jeq", 0x30}, {"jgt", 0x34}, {"jlt", 0x38}, {"j", 0x3c},
 		{"jsub", 0x48}, {"rsub", 0x4c}, 
-		{"ldch", 0x50}, {"stch", 0x54}, {"addx", 0x19},
+		{"ldch", 0x50}, {"stch", 0x54},
 		{"rd", 0xd8}, {"wd", 0xdc}, {"td", 0xe0}
 	};
 
@@ -113,8 +112,7 @@ protected:
 		{0xdc, std::bind(&SIC::WD, this, std::placeholders::_1)},
 		{0xe0, std::bind(&SIC::TD, this, std::placeholders::_1)},
 		{0x50, std::bind(&SIC::LDCH, this, std::placeholders::_1)},
-		{0x54, std::bind(&SIC::STCH, this, std::placeholders::_1)},
-		{0x19, std::bind(&SIC::ADDX, this, std::placeholders::_1)}
+		{0x54, std::bind(&SIC::STCH, this, std::placeholders::_1)}
 	};
 
 private:

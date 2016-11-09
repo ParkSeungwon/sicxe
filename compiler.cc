@@ -47,6 +47,7 @@ void Compiler::make_obj_code()
 			v.push_back(+op_table[a[1]]);
 			for(auto& c : a[2]) v.push_back(c);
 			obj_code.push_back({addr, v});
+			addr += 3;
 		} else if(addr < sym_table["data_begin"]) {
 			if(started) {
 				short two_part;

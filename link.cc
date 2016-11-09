@@ -23,13 +23,16 @@ void Linker::operator+=(Module m)
 		ss << a.second;
 		char c[2];
 		ss >> c[0] >> c[1];
-		if(c[0] == '4' && c[1] == '8') continue;//jsub : does not change a.second
+		if(c[0] == '4' && c[1] == '8') {
+			a.second.insert(2, 1, '<');
+			continue;//jsub : does not change a.second
+		}
 		int operand;
 		ss >> hex >> operand;
 		ss.clear();
 		ss << c[0] << c[1];//insert opcode
 		if(operand >= start) {
-			operand += offset;
+			operand += offset;//change offset
 			ss << setfill('0') << setw(4) << hex << operand;
 		}
 		ss >> a.second;
@@ -41,11 +44,11 @@ void Linker::operator+=(Module m)
 void Linker::link()
 {
 	for(auto& a : lines) {
-		if(a.second[0] == '4' && a.second[1] == '8') {
+		if(a.second[0] == '4' && a.second[1] == '8' && a.second[2] == '<') {
 			stringstream ss2;
 			ss2 << a.second;
 			string s, file;
-			ss2 >> setw(2) >> s;
+			ss2 >> setw(3) >> s;
 			while (ss2 >> setw(2) >> s) file += (char)stoi(s, nullptr, 16);
 			short jump_address = module_address[file];
 			stringstream ss;
