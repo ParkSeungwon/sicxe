@@ -8,13 +8,13 @@ using namespace std;
 void Linker::operator+=(Module m)
 {
 	if(lines.empty()) {
-		module_num = m.module_num;
+		module_name = m.module_name;
 		start = m.start;
 		data = m.data;
 		end = m.end;
 	} else {
 		offset = end + 1 - m.start;
-		module_address[m.module_num] = end + 1;
+		module_address[m.module_name] = end + 1;
 		end += 1 + m.end - m.start;
 	}
 	for(auto& a : m.lines) {
@@ -23,25 +23,14 @@ void Linker::operator+=(Module m)
 		ss << a.second;
 		char c[2];
 		ss >> c[0] >> c[1];
+		if(c[0] == '4' && c[1] == '8') continue;//jsub : does not change a.second
 		int operand;
 		ss >> hex >> operand;
 		ss.clear();
-		ss << c[0] << c[1];
-	/*	if(operand & (1<<15)) {
-			cout << operand << endl;
-			operand ^= 1<<15;
-			operand += offset;
-			operand |= 1<<15;
-			ss << setfill('0') << setw(4) << operand;
-		} else*/ if(operand >= start) {
+		ss << c[0] << c[1];//insert opcode
+		if(operand >= start) {
 			operand += offset;
 			ss << setfill('0') << setw(4) << hex << operand;
-		} else {//매우 제한적이지만 오브젝트파일은 숫자로 이름을 지어야 한다.
-			//그리고 그 파일명이 스타트 번지보다 작아야 한다.
-			//링커에 첫번째 매개변수로 들어오는 파일이 메인이 된다.
-			//서브루틴은 오브젝트파일의 숫자를 오퍼란드로 한다.
-			//이 부분은 서브루틴이라고 마크하는 부분이다.
-			ss << '<' << setfill('0') << setw(2) << hex << operand << '>';
 		}
 		ss >> a.second;
 	}
@@ -52,14 +41,16 @@ void Linker::operator+=(Module m)
 void Linker::link()
 {
 	for(auto& a : lines) {
-		char c[3] {};
-		if(a.second[2] == '<') {
-			c[0] = a.second[3];
-			c[1] = a.second[4];
-			short jump_address = module_address[atoi(c)];
+		if(a.second[0] == '4' && a.second[1] == '8') {
+			stringstream ss2;
+			ss2 << a.second;
+			string s, file;
+			ss2 >> setw(2) >> s;
+			while (ss2 >> setw(2) >> s) file += (char)stoi(s, nullptr, 16);
+			short jump_address = module_address[file];
 			stringstream ss;
 			ss << setw(4) << hex << setfill('0') << jump_address;
-			a.second.replace(2, 4, ss.str());
+			a.second.replace(2, string::npos, ss.str());
 		}
 	}
 	write_file();
@@ -67,17 +58,17 @@ void Linker::link()
 
 void Linker::write_file()
 {
-	ofstream f(to_string(module_num) + ".x");
+	ofstream f(module_name + ".x");
 	f << "start " << hex << start << endl << "data " << hex << data << endl << "end " << hex << end << endl;
 	for(auto& a : lines) f << hex << setw(4) << setfill('0') << a.first << ' ' << a.second << endl;
 }
 
 
-Module::Module(int num)
+Module::Module(string file)
 {
-	ifstream f(to_string(num) + ".o");
+	ifstream f(file + ".o");
 	string s;
-	module_num = num;
+	module_name = file;
 	f >> s >> hex >> start >> s >> hex >> data >> s >> hex >> end;
 	short addr;
 	while(f >> hex >> addr) {

@@ -7,11 +7,12 @@ class Module
 {
 public:
 	friend class Linker;
-	Module(int module_num);
+	Module(std::string module_name);
 
 protected:
 	Module() {}
-	short module_num, start, data, end;
+	std::string module_name;
+	short start, data, end;
 	std::vector<std::pair<short, std::string>> lines;
 };
 
@@ -22,7 +23,7 @@ public:
 	void link();
 
 protected:
-	std::map<short, short> module_address;
+	std::map<std::string, short> module_address;
 
 private:
 	void write_file();

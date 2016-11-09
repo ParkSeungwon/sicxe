@@ -42,7 +42,12 @@ void Compiler::make_obj_code()
 	short addr = sym_table["start"];
 	bool started = false;
 	for(auto& a : instructions) {
-		if(addr < sym_table["data_begin"]) {
+		if(a[1] == "jsub") {
+			vector<unsigned char> v;
+			v.push_back(+op_table[a[1]]);
+			for(auto& c : a[2]) v.push_back(c);
+			obj_code.push_back({addr, v});
+		} else if(addr < sym_table["data_begin"]) {
 			if(started) {
 				short two_part;
 				auto pos = a[2].find(",x");
@@ -50,10 +55,7 @@ void Compiler::make_obj_code()
 					a[2] = a[2].erase(pos);
 					two_part = (1 << 15) | sym_table[a[2]];
 				} else if(is_symbol(a[2])) two_part = sym_table[a[2]];
-				else {
-					if(a[2] == "") two_part = 0;
-					else two_part = stoi(a[2], nullptr, 16);
-				}
+				else if(a[2] == "") two_part = 0;
 				obj_code.push_back({addr, {+op_table[a[1]], two_part >> 8, two_part & 255}});
 				addr += 3;
 			}
@@ -62,7 +64,7 @@ void Compiler::make_obj_code()
 			obj_code.push_back({addr, {0}});
 			break;
 		} else {
-			int k = a[2] == "" ? sym_table["end"] : stoi(a[2], nullptr, 16);//""->rsub
+			int k = a[2] == "" ? 0 : stoi(a[2], nullptr, 16);
 			if(a[1] == "word") {
 				obj_code.push_back({addr, {k >> 16, (k >> 8) & 255, k & 255}});
 				addr += 3;

@@ -1,7 +1,7 @@
  start 1000
 loop ldch string,x
  wd string
- jsub 20
+ jsub x++
  comp end_string
  jeq quit
  j loop

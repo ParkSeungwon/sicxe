@@ -42,7 +42,7 @@ void Interpreter::show_mem()
 
 void Interpreter::execute()
 {
-	//show_mem();
+	show_mem();
 	short operand = memory[PC + 1];
 	operand <<= 8;
 	operand |= memory[PC + 2];
