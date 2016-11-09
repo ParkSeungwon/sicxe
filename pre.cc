@@ -43,6 +43,7 @@ PreProcessor::PreProcessor(string file, string out)
 		} else if(instructions[i][0] == "mend") {
 			m.end = i;
 			macros.push_back(m);
+			m.args.clear();
 		}
 		int idx = is_macro(instructions[i][1]);
 		if(idx >= 0) {
@@ -52,9 +53,13 @@ PreProcessor::PreProcessor(string file, string out)
 		}
 	}
 	
-	for(auto& a : macros) //strip definition part
-		instructions.erase(instructions.begin() + a.start, 
-				instructions.begin() + a.end + 1);
+	int deleted_lines = 0;
+	for(auto& a : macros) {//strip definition part
+		instructions.erase(instructions.begin() + a.start - deleted_lines, 
+				instructions.begin() + a.end + 1 - deleted_lines);
+		deleted_lines += a.end - a.start + 1;
+	}
+		
 	
 	ofstream f(out);//write to file
 	for(auto& a : instructions) f << a[0] << ' ' << a[1] << ' ' << a[2] << endl;
