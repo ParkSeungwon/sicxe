@@ -7,6 +7,10 @@ loop ldch string,x
  j loop
 quit lda string
 data word 0
-string byte c'Hello.'
-end_string word 2e
+string byte c'Hello'
+ byte 20
+ byte c'World!'
+end_string byte 0
+ byte 0
+ word c'!'
  end 

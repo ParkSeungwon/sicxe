@@ -18,7 +18,7 @@
 	\centering
 	\pgfornament[width=12cm,color=teal]{84}\\
 	\vspace{1cm}
-	\fontsize{50}{50} \selectfont {시스템 S/W 실습6\\선택 과제}\\
+	\fontsize{50}{50} \selectfont {시스템 S/W 실습7}\\
 	\pgfornament[width=12cm,color=teal]{88}\\
 	\vfill}
 \author{
@@ -46,27 +46,16 @@
 \pagenumbering{gobble}
 \lstset{language=C++}
 %\begin{multicols}{2}
-2. SIC srcfile을 읽어서 각 줄을 LABEL, OPCODE, OPERAND 로 분리하여 Intfile에 출력하면서 SYMTAB[]을 생성한다.(실습 5의 PASS1 내용), 
-그리고 Intfile을 입력하고, SYMTAB[]의 내용을 사용하여 OPCODE가 기계명령이면 {LOCCTR, CODE, ADDRESS}를 ObjTmpfile에 출력하는 어셈블러 PASS2에 해당하는 프로그램을 구현하고 실습하시오.
-LOCCTR은 Location, Counter이고, CODE는 OPTAB[]에서 읽은 기계코드이고, ADDRESS는 OPERAND로서 SYMTAB[]에서 읽은 값이다.
+2. 다음에 주어진 파일 입출력 프로그램을 참고하여 SIC srcfile을 assemble 할 때 출력되는 OBJFILE을 읽어서 각 줄의 TAG(첫 글자)가 'T'인 줄을 TAG, ADDR, LENGTH, CODES로 분리하고, 분리된 것 중에서 CODES에 해당하는 내용을 메모리 내부표현(internal representation)으로 변화(Code conversion)하고, 문자코드로 표현된 CODES와 코드변환된 InCodes(각 문자를 변환하여 10진법 표기 값)을 출력하는 프로그램을 구현하고 실습하시오.
 
 \vspace{1cm}
-단, C program compile 명령은 다음과 같고, 입력파일 srcfile은 각자 준비한다.
 
-\$g++ -o pass2 pass2.c\\
-
-\$./pass2 srcfile Intfile ObjTmpFile
-
-\lstinputlisting[caption={실행 파일의 소스, pass2.cpp}]{pass2.cpp}
-\lstinputlisting[caption={임의의 srcfile}]{1.s}
-\lstinputlisting[caption={소오스와 거의 차이가 없는 Intfile}]{int}
-실제로는 vector에 분리하여 넣었지만, 파일 상으로는 소오스와 거의 차이가 없다.
-
-\lstinputlisting[caption={결과로 나온 ObjTmpFile}]{obj}
-결과가 주소와 opcode, operand의 주소를 제대로 찾고 있음을 알 수 있다.
+\lstinputlisting[caption={실행 파일의 소스}]{pass2.cpp}
+\lstinputlisting[caption={임의의 srcfile}]{test.o}
+\includegraphics[width=\textwidth]{tt.png}
 
 {\Huge소감}
 \indent
-기존에 냈던 소스들을 약간 수정하여 합쳤습니다. 
+스트림 클래스가 유용했다. 
 
 \end{document}

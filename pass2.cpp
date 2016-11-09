@@ -16,11 +16,16 @@ int main(int argc, char** v)
 			cout << ", ADDR : " << s;
 			f >> setw(2) >> s;
 			cout << ", LEN : " << s << endl;
-			for(int i=0; i<stoi(s, nullptr, 16); i++) {
-				f >> c;
-				if(c >= 'A') cout << c - 55 << ',';
-				else cout << c - '0' << ',';
+			char ch[stoi(s, nullptr, 16)];
+			for(int i=0; i<stoi(s, nullptr, 16); i++) f >> ch[i];
+			cout << "CODE : ";
+			for(auto& a : ch) cout << a;
+			cout << "\nHCODE : ";
+			for(auto& a : ch) {
+				if(a >= 'A') cout << a - 55 << ',';
+				else cout << a - '0' << ',';
 			}
+			cout << endl;
 		}
 	}
 }

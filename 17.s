@@ -12,6 +12,14 @@ string byte 48
  byte 6c
  byte 6c
  byte 6f
- byte 2e
-end_string word 2e
+ byte 20
+ byte 57
+ byte 6f
+ byte 72
+ byte 6c
+ byte 64
+ byte 21
+end_string byte 0
+ byte 0
+ word c'!'
  end 
