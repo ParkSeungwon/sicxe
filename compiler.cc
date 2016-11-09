@@ -51,7 +51,13 @@ void Compiler::make_obj_code()
 				} else if(is_symbol(a[2])) two_part = sym_table[a[2]];
 				else {
 					if(a[2] == "") two_part = 0;
-					else two_part = stoi(a[2], nullptr, 16);
+					else try {
+						two_part = stoi(a[2], nullptr, 16);
+					} catch (const std::exception& e) {
+						cerr << e.what() << " at " << a[0];
+						cerr << ' ' << a[1] << ' ' << a[2] << endl;
+						throw e;
+					}
 				}
 				obj_code.push_back({addr, {+op_table[a[1]], two_part >> 8, two_part & 255}});
 				addr += 3;

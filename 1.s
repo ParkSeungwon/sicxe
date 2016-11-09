@@ -1,22 +1,45 @@
-	start 1000
-first lda   seven
-	sta alpha
-	lda two
-	add incr
-	sta beta
-	lda gamma
-	sub two
-	sta delta
-	ldch charx
-	stch cha
-seven word 7
-two word 2
-alpha resw 1
-beta resw 1
-gamma word 10
-delta resw 1
-incr word 3
-cha resb 1
-charx byte 78
-	end first
-
+ START  1000
+FIRST  STL    RETADR
+CLOOP  JSUB   RDREC
+	 LDA    LENGTH
+	 COMP   ZERO
+	 JEQ    ENDFIL
+	 JSUB   WRREC
+	 J      CLOOP
+ENDFIL LDA    EOF
+	 STA    BUFFER
+	 LDA    THREE
+	 STA    LENGTH
+	 JSUB   WRREC
+	 LDL    RETADR
+	 RSUB
+EOF    BYTE   C'EOF'
+THREE  WORD   3
+ZERO   WORD   0
+RETADR RESW   1
+LENGTH RESW   1
+BUFFER RESB   fff
+RDREC  LDX    ZERO
+	 LDA    ZERO
+RLOOP  TD     INPUT
+	 JEQ    RLOOP
+	 RD     INPUT
+	 COMP   ZERO
+	 JEQ    EXIT
+	 STCH   BUFFER,X
+	 TIX    MAXLEN
+	 JLT    RLOOP
+EXIT   STX    LENGTH
+	 RSUB
+INPUT  BYTE   F1
+MAXLEN WORD   fff
+WRREC  LDX    ZERO
+WLOOP  TD     OUTPUT
+	 JEQ    WLOOP
+	 LDCH   BUFFER,X
+	 WD     OUTPUT
+	 TIX    LENGTH
+	 JLT    WLOOP
+	 RSUB
+OUTPUT BYTE   6
+	 END   

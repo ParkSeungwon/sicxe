@@ -1,14 +1,17 @@
-macro mymacro a,b
-	ldch	a
-	ldch	b
-MEND
-	START	1000
-	mymacro	data,store
-	mymacro	store,store
-	mymacro	fix,data
-	ldch	data
-	stch	store
-data	byte	3
-store	byte	C'A'
-fix	byte	c't'
+	start 1000
+RDREC  LDX    ZERO
+	 LDA    ZERO
+RLOOP  TD     INPUT
+	 JEQ    RLOOP
+	 RD     INPUT
+	 COMP   ZERO
+	 JEQ    EXIT
+	 STCH   BUFFER,X
+	 TIX    MAXLEN
+	 JLT    RLOOP
+EXIT   STX    LENGTH
+INPUT  BYTE   F1
+MAXLEN WORD   fff
+zero word 0
+buffer resw 256
 	end

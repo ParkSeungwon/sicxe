@@ -3,18 +3,9 @@
 #include"sic.h"
 using namespace std;
 
-void SIC::LDA(short addr)
-{
-	A = fetch(addr);
-}
-void SIC::LDL(short addr) {
-	L = fetch(addr);
-}
-
-void SIC::LDX(short addr) 
-{
-	X = fetch(addr);
-}
+void SIC::LDA(short addr) { A = fetch(addr); }
+void SIC::LDL(short addr) { L = fetch(addr); } 
+void SIC::LDX(short addr) { X = fetch(addr); }
 void SIC::STX(short addr) 
 {
 	memory[addr] = X.opcode;
@@ -34,10 +25,7 @@ void SIC::STL(short addr)
 	memory[addr + 2] = L.address & 255;
 }
 
-bool SIC::is_opcode(string s)
-{
-	return op_table.find(s) != op_table.end();
-}
+bool SIC::is_opcode(string s) { return op_table.find(s) != op_table.end(); }
 
 void SIC::TIX(short addr) {
 	int x = X;
@@ -73,49 +61,13 @@ int SIC::fetch(short addr) const
 	return r;
 }
 
-void SIC::ADD(short addr) 
-{
-	int n = fetch(addr);
-	int a = A;
-	A = a + n;
-}
-void SIC::ADDX(short addr)
-{
-	int a = A;
-	int x = X;
-	int k = fetch(addr + x);
-	A = a + k;
-}
+void SIC::ADD(short addr) { A = A + fetch(addr); }
+void SIC::SUB(short addr) { A = A - fetch(addr); }
+void SIC::MUL(short addr) { A = A * fetch(addr); }
+void SIC::DIV(short addr) { A = A / fetch(addr); }
 
-void SIC::SUB(short addr)
-{
-	int n = fetch(addr);
-	int a = A;
-	A = a - n;
-}
-
-void SIC::LDCH(short addr)
-{
-	A = memory[addr];
-}
-
-void SIC::STCH(short addr)
-{
-	memory[addr] = A.address & 255;
-}
-
-void SIC::MUL(short addr) 
-{
-	int n = fetch(addr);
-	int a = A;
-	A = a * n;
-}
-void SIC::DIV(short addr) 
-{
-	int n = fetch(addr);
-	int a = A;
-	A = a / n;
-}
+void SIC::LDCH(short addr) { A = memory[addr]; }
+void SIC::STCH(short addr) { memory[addr] = A.address & 255; }
 void SIC::COMP(short addr) 
 {
 	int n = fetch(addr);
@@ -124,39 +76,24 @@ void SIC::COMP(short addr)
 	else if(a < n) SW.opcode = 1;
 	else SW.opcode = 2;
 }
-void SIC::JEQ(short addr) {
-	if(!SW.opcode) PC = addr - 3;
-}
-void SIC::JGT(short addr) {
-	if(SW.opcode == 2) PC = addr - 3;
-}
-void SIC::J(short addr) {
-	PC = addr - 3;
-}
-void SIC::JLT(short addr) 
-{
-	if(SW.opcode == 1) PC = addr - 3;
-}
+void SIC::JEQ(short addr) { if(!SW.opcode) PC = addr - 3; }
+void SIC::JGT(short addr) { if(SW.opcode == 2) PC = addr - 3; }
+void SIC::J(short addr) { PC = addr - 3; }
+void SIC::JLT(short addr) { if(SW.opcode == 1) PC = addr - 3; }
 void SIC::JSUB(short addr) 
 {
 	int pc = PC;
 	int k = addr;
 	L = pc;
 	PC = k - 3;
-}
-
-void SIC::RSUB(short addr) 
-{
-	PC = L;
-}
+} 
+void SIC::RSUB(short addr) { PC = L; }
 void SIC::RD(short addr) {
 	char c;
 	cin >> c;	
 	A = (int)c;
 }
-void SIC::WD(short addr) {
-	cout << (char)(A.address & 0xff);
-}
+void SIC::WD(short addr) { cout << (char)(A.address & 0xff); }
 void SIC::TD(short addr) {}
 
 
