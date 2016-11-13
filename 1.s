@@ -30,9 +30,8 @@ quit word 0
 string byte c'Hello'
  byte 20
  byte c'World!'
-end_string byte 0
- byte 0
- byte c'!'
+ byte 10
+end_string word 0
 garage resw 3
 three word 3
  end 

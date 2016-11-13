@@ -59,10 +59,9 @@ void SIC::COMP(short addr)
 	else SW.opcode = 2;
 }
 void SIC::TIX(short addr) {
-	int x = X;
-	X = x + 1;
+	X = X + 1;
 	int a = A;
-	A = x + 1;
+	A = X;
 	COMP(addr);
 	A = a;
 }

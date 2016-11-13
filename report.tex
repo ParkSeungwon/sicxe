@@ -18,7 +18,7 @@
 	\centering
 	\pgfornament[width=12cm,color=teal]{84}\\
 	\vspace{1cm}
-	\fontsize{50}{50} \selectfont {시스템 S/W 실습7}\\
+	\fontsize{50}{50} \selectfont {동국 SW 공모대전\\SIC emulator 설명서}\\
 	\pgfornament[width=12cm,color=teal]{88}\\
 	\vfill}
 \author{
@@ -45,14 +45,19 @@
 
 \pagenumbering{gobble}
 \lstset{language=C++}
+\lstinputlisting[caption={1.s : Hello World in SIC}]{1.s}
+\lstinputlisting[caption={2.s : X 레지스터의 값을 1 증가시키는 모듈}]{2.s}
+\lstinputlisting[caption={1.s가 전처리된 소스 파일}]{/tmp/1.s}
+\lstinputlisting[caption={2.s가 전처리된 소스 파일}]{/tmp/2.s}
+\lstinputlisting[caption={1.o : 오브젝트 파일}]{1.o}
+\lstinputlisting[caption={2.o : 오브젝트 파일}]{2.o}
+\lstinputlisting[caption={1.x : 1.o와 2.o가 링크된 실행 파일}]{1.x}
+\includegraphics[width=\textwidth]{hello.png}
 %\begin{multicols}{2}
 2. 다음에 주어진 파일 입출력 프로그램을 참고하여 SIC srcfile을 assemble 할 때 출력되는 OBJFILE을 읽어서 각 줄의 TAG(첫 글자)가 'T'인 줄을 TAG, ADDR, LENGTH, CODES로 분리하고, 분리된 것 중에서 CODES에 해당하는 내용을 메모리 내부표현(internal representation)으로 변화(Code conversion)하고, 문자코드로 표현된 CODES와 코드변환된 InCodes(각 문자를 변환하여 10진법 표기 값)을 출력하는 프로그램을 구현하고 실습하시오.
 
 \vspace{1cm}
 
-\lstinputlisting[caption={실행 파일의 소스}]{pass2.cpp}
-\lstinputlisting[caption={임의의 srcfile}]{test.o}
-\includegraphics[width=\textwidth]{tt.png}
 
 {\Huge소감}
 \indent
