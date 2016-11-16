@@ -4,13 +4,13 @@
 class Interpreter : public SIC
 {
 public:
-	Interpreter(std::string file, bool debug);
-	void show_mem();
+	Interpreter(std::string file, bool debug, short s, short e);
+	void show_mem(short start=0, short end=0);
 
 protected:
 	int start, end, data_begin;
 	void load_to_memory(std::string file);
-	void execute(bool debug);
+	void execute(bool debug, short s, short e);
 
 private:
 };

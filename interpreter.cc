@@ -6,10 +6,12 @@
 #include"interpreter.h"
 using namespace std;
 
-Interpreter::Interpreter(string file, bool debug)
+Interpreter::Interpreter(string file, bool debug, short s, short e)
 {
 	load_to_memory(file);
-	while(PC != data_begin) execute(debug);
+	if(!s) s = data_begin;
+	if(!e) e = end;
+	while(PC != data_begin) execute(debug, s, e);
 }
 
 void Interpreter::load_to_memory(string file)
@@ -25,14 +27,14 @@ void Interpreter::load_to_memory(string file)
 	PC = start;
 }
 
-void Interpreter::show_mem()
+void Interpreter::show_mem(short s, short e)
 {
 	cout << "A : " << setfill('0') << setw(6) << hex << A;
 	cout << ", X : " << setfill('0') << setw(6) << hex << X;
 	cout << ", L : " << setfill('0') << setw(6) << hex << L;
 	cout << ", PC : " << setfill('0') << setw(6) << hex << PC;
 	cout << ", SW : " << setfill('0') << setw(6) << hex << SW << endl;
-	for(int i = data_begin, j = 0; i < end; i++, j++) {
+	for(int i = s, j = 0; i < e; i++, j++) {
 		cout << setfill('0') << setw(2) << hex << +memory[i];
 		if(j % 3 == 2) cout << ' ';
 		if(j % 30 == 29) cout << endl;
@@ -40,9 +42,9 @@ void Interpreter::show_mem()
 	cout << endl;
 }
 
-void Interpreter::execute(bool debug)
+void Interpreter::execute(bool debug, short s, short e)
 {
-	if(debug) show_mem();
+	if(debug) show_mem(s, e);
 	short operand = memory[PC + 1];
 	operand <<= 8;
 	operand |= memory[PC + 2];
