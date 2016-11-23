@@ -1,0 +1,3 @@
+date
+who
+du -a

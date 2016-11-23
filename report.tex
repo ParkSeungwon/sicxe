@@ -46,26 +46,54 @@
 \pagenumbering{gobble}
 \lstset{language=C++}
 %\begin{multicols}{2}
-1. 다음에 주어진 리눅스 명령을 입력하고, 실습하시오.
-1)환경변수: 문자열변수 : \$HOME, \$PATH, \$MAIL, \$USER, \$TERM, \$SHELL\\
+\begin{enumerate}
+\item 다음에 주어진 리눅스 명령을 입력하고, 실습하시오.
+\begin{enumerate}
+	
+
+\item 환경변수: 문자열변수 : \$HOME, \$PATH, \$MAIL, \$USER, \$TERM, \$SHELL\\
+
 \$echo HOME=\$HOME, PATH=\$PATH
 
-2)내장변수: \$\$(셸의 프로세스 id), \$0(셀 스크립트 이름), \$1...\$9(명령어 줄 인수 참조), \$*(모든 명령어 줄 인수의 목록), \$@(\$*의 변형)
+\includegraphics[width=\textwidth]{1.png}
+\item 내장변수: \$\$(셸의 프로세스 id), \$0(셀 스크립트 이름), \$1...\$9(명령어 줄 인수 참조), \$*(모든 명령어 줄 인수의 목록), \$@(\$*의 변형)
 
+\item 셀 스크립트 파일 작성
+\lstinputlisting[caption={cat - \textgreater script.sh}]{script.sh}
 
-\lstinputlisting[caption=sum.c]{sum.c}
-\lstinputlisting[caption=sum.s]{sum.s}
+\$chmod +x script.sh
 
-\lstinputlisting[caption={objdump -d sum.o}]{sum.dump}
-\vspace{1cm}
+\includegraphics[width=\textwidth]{2.png}
 
-2. 다음에 주어진 main.c를 컴파일하여 main.o를 얻고, main.o와 sum.o를 link하여 실행파일 prog를 얻고, prog로서 Linux debugger program인 'gdb'를 사용해서 1명령씩 실행하면서 필요한 register들의 값을 확인하시오.
+\item .login file 보기
 
-\lstinputlisting[caption=main.c]{main.c}
-\lstinputlisting[caption={gdb 실행}]{log}
+\lstinputlisting[caption={\$cat ~/.bashrc | more}]{/tmp/l}
 
+\item 터미널 특성 변경 : stty\\
+\$stty erase '\^H'\\
+이미 터미널에 Ctrl-H가 셋팅되어 있었다.
+\item 수행중인 프로세스 보기 : ps
+\lstinputlisting[caption=출력결과]{/tmp/lll}
+\item 지역변수 보기 : set\\
+env로 실행시 환경변수를 볼 수 있었다.
+\item 지역변수 설정 : set 변수명 = 변수값
+
+\includegraphics[width=\textwidth]{3.png}
+
+\end{enumerate}
+
+\item 다음과 같은 기능을 수행하는 script 파일 sample.sh을 생성하고 실행하시오.
+\begin{enumerate}
+	\item date 명령을 사용해서 현재 시간을 display 한다.
+	\item who 명령을 사용해서 login 되어 있는 사용자 수를 display 한다.
+	\item du -a 명령을 사용해서 disk file 크기를 display한다.
+\end{enumerate}
+
+\end{enumerate}
+\lstinputlisting[caption=sample.sh]{sample.sh}
+\lstinputlisting[caption=출력결과]{/tmp/ll}
 {\Huge소감}
 \indent
-gdb나 컴파일러가 아직도 모르는 옵션들이 매우 많다는 것을 느꼈다.  
+스크립트가 매우 유용하다는 것을 느꼈다.
 
 \end{document}
