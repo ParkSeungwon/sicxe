@@ -18,7 +18,7 @@
 	\centering
 	\pgfornament[width=12cm,color=teal]{84}\\
 	\vspace{1cm}
-	\fontsize{50}{50} \selectfont {시스템 S/W 실습7}\\
+	\fontsize{50}{50} \selectfont {시스템 S/W 실습9}\\
 	\pgfornament[width=12cm,color=teal]{88}\\
 	\vfill}
 \author{
@@ -46,16 +46,26 @@
 \pagenumbering{gobble}
 \lstset{language=C++}
 %\begin{multicols}{2}
-2. 다음에 주어진 파일 입출력 프로그램을 참고하여 SIC srcfile을 assemble 할 때 출력되는 OBJFILE을 읽어서 각 줄의 TAG(첫 글자)가 'T'인 줄을 TAG, ADDR, LENGTH, CODES로 분리하고, 분리된 것 중에서 CODES에 해당하는 내용을 메모리 내부표현(internal representation)으로 변화(Code conversion)하고, 문자코드로 표현된 CODES와 코드변환된 InCodes(각 문자를 변환하여 10진법 표기 값)을 출력하는 프로그램을 구현하고 실습하시오.
+1. 다음에 주어진 리눅스 명령을 입력하고, 실습하시오.
+1)환경변수: 문자열변수 : \$HOME, \$PATH, \$MAIL, \$USER, \$TERM, \$SHELL\\
+\$echo HOME=\$HOME, PATH=\$PATH
 
+2)내장변수: \$\$(셸의 프로세스 id), \$0(셀 스크립트 이름), \$1...\$9(명령어 줄 인수 참조), \$*(모든 명령어 줄 인수의 목록), \$@(\$*의 변형)
+
+
+\lstinputlisting[caption=sum.c]{sum.c}
+\lstinputlisting[caption=sum.s]{sum.s}
+
+\lstinputlisting[caption={objdump -d sum.o}]{sum.dump}
 \vspace{1cm}
 
-\lstinputlisting[caption={실행 파일의 소스}]{pass2.cpp}
-\lstinputlisting[caption={임의의 srcfile}]{test.o}
-\includegraphics[width=\textwidth]{tt.png}
+2. 다음에 주어진 main.c를 컴파일하여 main.o를 얻고, main.o와 sum.o를 link하여 실행파일 prog를 얻고, prog로서 Linux debugger program인 'gdb'를 사용해서 1명령씩 실행하면서 필요한 register들의 값을 확인하시오.
+
+\lstinputlisting[caption=main.c]{main.c}
+\lstinputlisting[caption={gdb 실행}]{log}
 
 {\Huge소감}
 \indent
-스트림 클래스가 유용했다. 
+gdb나 컴파일러가 아직도 모르는 옵션들이 매우 많다는 것을 느꼈다.  
 
 \end{document}
