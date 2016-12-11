@@ -1,0 +1,37 @@
+copy     start   0              test program for sic software
+plus     macro   &x,&y,&z
+         lda     &x
+         add     &y
+         sta     &z
+         mend
+rdbuff   macro   &indev,&bufadr,&reclth
+	 clear   x
+         clear   a
+         clear   s
+         ldt     #100
+         td      =x'&indev'
+         jeq     *-3
+         rd      =x'&indev'
+         compr   a,s
+         jeq     *+11
+         stch    &bufadr,x
+         tixr    t
+         jlt     *-19
+         stx     &reclth
+         mend
+first    stl     retadr            save return address
+         rdbuff  f1,buffer,length
+cloop    lda     length            test for eof (length = 0 
+         comp    #0                 plus eol or eof) 
+         jeq     endfil            exit if eof found
+         plus    a,b,c             plus macro call 
+         j       cloop             loop 
+endfil   j       @retadr        
+eof      byte    c'eof' 
+retadr   resw    1
+a        word    100
+b        word    200
+c        resw    1
+length   resw    1
+buffer   resb    4096              4096-byte buffer area
+         end     first
