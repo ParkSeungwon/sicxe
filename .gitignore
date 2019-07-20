@@ -8,3 +8,7 @@
 *.log
 *.jpg
 
+find
+.
+-size
++3M
